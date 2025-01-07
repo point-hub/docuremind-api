@@ -2,6 +2,9 @@ import { type IDocument, type ISchemaValidation } from '@point-hub/papi'
 import Validatorjs from 'validatorjs'
 
 import { throwApiError } from './throw-api-error'
+import { registerValidationPassword } from './validation-password'
+
+registerValidationPassword()
 
 // https://github.com/mikeerickson/validatorjs
 export const schemaValidation: ISchemaValidation = async (document: IDocument, schema: IDocument) => {

@@ -1,0 +1,8 @@
+export { CreateExampleRepository } from './create.repository'
+export { CreateManyExampleRepository } from './create-many.repository'
+export { DeleteExampleRepository } from './delete.repository'
+export { DeleteManyExampleRepository } from './delete-many.repository'
+export { RetrieveExampleRepository } from './retrieve.repository'
+export { RetrieveAllExampleRepository } from './retrieve-all.repository'
+export { UpdateExampleRepository } from './update.repository'
+export { UpdateManyExampleRepository } from './update-many.repository'
