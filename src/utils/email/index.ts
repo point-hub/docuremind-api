@@ -1,4 +1,4 @@
-import { copyrightYear, Handlebars, renderInlineCss } from '@point-hub/express-utils'
+import { copyrightYear, Handlebars } from '@point-hub/express-utils'
 
 import emailServiceConfig from '@/config/email'
 
@@ -15,11 +15,12 @@ Handlebars.registerHelper('appName', () => {
 Handlebars.registerHelper('copyrightYear', copyrightYear)
 
 // Render
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const renderHbsTemplate = async (path: string, context?: Record<string, any>) => {
-  const html = Handlebars.render(await Bun.file(`./src/modules/${path}`).text(), context ?? {})
-
-  return renderInlineCss(html, await Bun.file('./src/utils/email/style.css').text())
+export const renderHbsTemplate = async (path: string, context?: Record<string, unknown>) => {
+  const file = Bun.file(`./src/${path}`)
+  if (!(await file.exists())) {
+    return `Template not found: ${path}`
+  }
+  return Handlebars.render(await file.text(), context ?? {})
 }
 
 // Sending Mail
