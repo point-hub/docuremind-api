@@ -48,7 +48,7 @@ export const schema: ISchema[] = [
           description: 'Code for verification email',
         },
         is_email_verified: {
-          bsonType: 'boolean',
+          bsonType: 'bool',
           description: 'Is email verified or not',
         },
       },
