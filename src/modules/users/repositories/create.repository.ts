@@ -2,21 +2,23 @@ import type { IDatabase, IDocument } from '@point-hub/papi'
 
 import { collectionName } from '../entity'
 
-export interface ICreateExampleRepository {
-  handle(document: IDocument): Promise<ICreateExampleOutput>
+export interface ICreateUserRepository {
+  handle(document: IDocument): Promise<ICreateUserOutput>
 }
 
-export interface ICreateExampleOutput {
+export interface ICreateUserOutput {
   inserted_id: string
 }
 
-export class CreateExampleRepository implements ICreateExampleRepository {
+export class CreateUserRepository implements ICreateUserRepository {
   constructor(
     public database: IDatabase,
     public options?: Record<string, unknown>,
   ) {}
 
-  async handle(document: IDocument): Promise<ICreateExampleOutput> {
-    return await this.database.collection(collectionName).create(document, { ignoreUndefined: true, ...this.options })
+  async handle(document: IDocument): Promise<ICreateUserOutput> {
+    return await this.database
+      .collection(collectionName)
+      .create({ ...document, created_at: new Date() }, { ignoreUndefined: true, ...this.options })
   }
 }

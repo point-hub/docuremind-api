@@ -38,7 +38,7 @@ export class UpdateExampleUseCase {
       name: input.data.name,
       phone: input.data.phone,
     })
-    exampleEntity.generateDate('updated_date')
+    exampleEntity.generateDate('updated_at')
     exampleEntity.data = deps.objClean(exampleEntity.data)
     // 4. database operation
     const response = await deps.updateExampleRepository.handle(input._id, exampleEntity.data)

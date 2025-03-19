@@ -1,27 +1,27 @@
 import type { IDatabase, IPagination, IQuery } from '@point-hub/papi'
 
 import { collectionName } from '../entity'
-import { type IRetrieveExampleOutput } from './retrieve.repository'
+import { type IRetrieveUserOutput } from './retrieve.repository'
 
-export interface IRetrieveAllExampleRepository {
-  handle(query: IQuery): Promise<IRetrieveAllExampleOutput>
+export interface IRetrieveAllUserRepository {
+  handle(query: IQuery): Promise<IRetrieveAllUserOutput>
 }
 
-export interface IRetrieveAllExampleOutput {
-  data: IRetrieveExampleOutput[]
+export interface IRetrieveAllUserOutput {
+  data: IRetrieveUserOutput[]
   pagination: IPagination
 }
 
-export class RetrieveAllExampleRepository implements IRetrieveAllExampleRepository {
+export class RetrieveAllUserRepository implements IRetrieveAllUserRepository {
   constructor(
     public database: IDatabase,
     public options?: Record<string, unknown>,
   ) {}
 
-  async handle(query: IQuery): Promise<IRetrieveAllExampleOutput> {
+  async handle(query: IQuery): Promise<IRetrieveAllUserOutput> {
     const response = await this.database.collection(collectionName).retrieveAll(query, this.options)
     return {
-      data: response.data as unknown as IRetrieveExampleOutput[],
+      data: response.data as unknown as IRetrieveUserOutput[],
       pagination: response.pagination,
     }
   }

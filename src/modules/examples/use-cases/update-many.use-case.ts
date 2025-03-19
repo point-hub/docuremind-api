@@ -37,7 +37,7 @@ export class UpdateManyExampleUseCase {
       name: input.data.name,
       phone: input.data.phone,
     })
-    exampleEntity.generateDate('updated_date')
+    exampleEntity.generateDate('updated_at')
     exampleEntity.data = deps.objClean(exampleEntity.data)
     // 3. database operation
     const response = await deps.updateManyExampleRepository.handle(input.filter, exampleEntity.data)

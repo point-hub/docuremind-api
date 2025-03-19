@@ -87,7 +87,7 @@ describe('create many examples', async () => {
       expect(exampleRecord._id).toStrictEqual(response.body.inserted_ids[index])
       expect(exampleRecord['name']).toStrictEqual(data[index].name)
       expect(exampleRecord['phone']).toStrictEqual(data[index].phone)
-      expect(isValid(new Date(exampleRecord['created_date'] as string))).toBeTruthy()
+      expect(isValid(new Date(exampleRecord['created_at'] as string))).toBeTruthy()
     }
   })
 })

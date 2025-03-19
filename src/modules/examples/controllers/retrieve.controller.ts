@@ -24,8 +24,8 @@ export const retrieveExampleController: IController = async (controllerInput: IC
         _id: response._id,
         name: response.name,
         phone: response.phone,
-        created_date: response.created_date,
-        updated_date: response.updated_date,
+        created_at: response.created_at,
+        updated_at: response.updated_at,
       },
     }
   } catch (error) {

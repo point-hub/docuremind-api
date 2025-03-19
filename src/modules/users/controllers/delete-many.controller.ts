@@ -2,21 +2,21 @@ import type { IController, IControllerInput } from '@point-hub/papi'
 
 import { schemaValidation } from '@/utils/validation'
 
-import { DeleteManyExampleRepository } from '../repositories/delete-many.repository'
-import { DeleteManyExampleUseCase } from '../use-cases/delete-many.use-case'
+import { DeleteManyUserRepository } from '../repositories/delete-many.repository'
+import { DeleteManyUserUseCase } from '../use-cases/delete-many.use-case'
 
-export const deleteManyExampleController: IController = async (controllerInput: IControllerInput) => {
+export const deleteManyUserController: IController = async (controllerInput: IControllerInput) => {
   let session
   try {
     // 1. start session for transactional
     session = controllerInput.dbConnection.startSession()
     session.startTransaction()
     // 2. define repository
-    const deleteManyExampleRepository = new DeleteManyExampleRepository(controllerInput.dbConnection, { session })
+    const deleteManyUserRepository = new DeleteManyUserRepository(controllerInput.dbConnection, { session })
     // 3. handle business rules
-    const response = await DeleteManyExampleUseCase.handle(
+    const response = await DeleteManyUserUseCase.handle(
       { ids: controllerInput.httpRequest['body'].ids },
-      { schemaValidation, deleteManyExampleRepository },
+      { schemaValidation, deleteManyUserRepository },
     )
     await session.commitTransaction()
     // 4. return response to client

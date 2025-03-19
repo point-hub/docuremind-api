@@ -31,6 +31,6 @@ describe('retrieve an example', async () => {
     expect(response.body._id).toBeDefined()
     expect(response.body.name).toStrictEqual(examples.data[1]['name'])
     expect(response.body.phone).toStrictEqual(examples.data[1]['phone'])
-    expect(isValid(new Date(response.body.created_date))).toBeTruthy()
+    expect(isValid(new Date(response.body.created_at))).toBeTruthy()
   })
 })

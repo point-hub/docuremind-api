@@ -4,22 +4,22 @@ import type { IController, IControllerInput } from '@point-hub/papi'
 import { UniqueValidation } from '@/utils/unique-validation'
 import { schemaValidation } from '@/utils/validation'
 
-import { CreateManyExampleRepository } from '../repositories/create-many.repository'
-import { CreateManyExampleUseCase } from '../use-cases/create-many.use-case'
+import { CreateManyUserRepository } from '../repositories/create-many.repository'
+import { CreateManyUserUseCase } from '../use-cases/create-many.use-case'
 
-export const createManyExampleController: IController = async (controllerInput: IControllerInput) => {
+export const createManyUserController: IController = async (controllerInput: IControllerInput) => {
   let session
   try {
     // 1. start session for transactional
     session = controllerInput.dbConnection.startSession()
     session.startTransaction()
     // 2. define repository
-    const createManyExampleRepository = new CreateManyExampleRepository(controllerInput.dbConnection, { session })
+    const createManyUserRepository = new CreateManyUserRepository(controllerInput.dbConnection, { session })
     const uniqueValidation = new UniqueValidation(controllerInput.dbConnection)
     // 3. handle business rules
-    const response = await CreateManyExampleUseCase.handle(controllerInput.httpRequest['body'], {
+    const response = await CreateManyUserUseCase.handle(controllerInput.httpRequest['body'], {
       schemaValidation,
-      createManyExampleRepository,
+      createManyUserRepository,
       uniqueValidation,
       objClean,
     })

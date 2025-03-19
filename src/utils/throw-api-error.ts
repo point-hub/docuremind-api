@@ -5,6 +5,10 @@ export interface IOptions {
   errors?: object
 }
 
-export const throwApiError = (codeStatus: TypeCodeStatus, options?: IOptions) => {
+export interface IThrowApiError {
+  (codeStatus: TypeCodeStatus, options?: IOptions): void
+}
+
+export const throwApiError: IThrowApiError = (codeStatus, options) => {
   throw new BaseErrorHandler.ApiError(codeStatus, options)
 }

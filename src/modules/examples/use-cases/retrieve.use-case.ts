@@ -12,8 +12,8 @@ export interface IOutput {
   _id: string
   name: string
   phone: string
-  created_date: string
-  updated_date: string
+  created_at: string
+  updated_at: string
 }
 
 export class RetrieveExampleUseCase {
@@ -25,8 +25,8 @@ export class RetrieveExampleUseCase {
       _id: response._id,
       name: response.name,
       phone: response.phone,
-      created_date: response.created_date,
-      updated_date: response.updated_date,
+      created_at: response.created_at,
+      updated_at: response.updated_at,
     }
   }
 }

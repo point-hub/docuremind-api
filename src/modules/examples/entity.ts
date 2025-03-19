@@ -2,7 +2,7 @@ import { type IExampleEntity } from './interface'
 
 export const collectionName = 'examples'
 
-export type TypeFieldDate = 'created_date' | 'updated_date'
+export type TypeFieldDate = 'created_at' | 'updated_at'
 
 export class ExampleEntity {
   constructor(public data: IExampleEntity) {}

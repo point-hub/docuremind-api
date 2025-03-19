@@ -3,12 +3,12 @@ import type { ISchemaValidation } from '@point-hub/papi'
 
 import type { IUniqueValidation } from '@/utils/unique-validation'
 
-import { collectionName, ExampleEntity } from '../entity'
-import type { ICreateManyExampleRepository } from '../repositories/create-many.repository'
+import { collectionName, UserEntity } from '../entity'
+import type { ICreateManyUserRepository } from '../repositories/create-many.repository'
 import { createManyValidation } from '../validations/create-many.validation'
 
 export interface IInput {
-  examples: {
+  users: {
     name?: string
     phone?: string
   }[]
@@ -16,7 +16,7 @@ export interface IInput {
 
 export interface IDeps {
   schemaValidation: ISchemaValidation
-  createManyExampleRepository: ICreateManyExampleRepository
+  createManyUserRepository: ICreateManyUserRepository
   uniqueValidation: IUniqueValidation
   objClean: IObjClean
 }
@@ -26,25 +26,25 @@ export interface IOutput {
   inserted_ids: string[]
 }
 
-export class CreateManyExampleUseCase {
+export class CreateManyUserUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. validate schema
-    await deps.schemaValidation({ examples: input.examples }, createManyValidation)
+    await deps.schemaValidation({ users: input.users }, createManyValidation)
     // 2. define entity
     const entities = []
-    for (const document of input.examples) {
+    for (const document of input.users) {
       // 3. validate unique
       await deps.uniqueValidation.handle(collectionName, { name: document.name })
-      const exampleEntity = new ExampleEntity({
+      const userEntity = new UserEntity({
         name: document.name,
         phone: document.phone,
       })
-      exampleEntity.generateDate('created_date')
-      exampleEntity.data = deps.objClean(exampleEntity.data)
-      entities.push(exampleEntity.data)
+      userEntity.generateDate('created_at')
+      userEntity.data = deps.objClean(userEntity.data)
+      entities.push(userEntity.data)
     }
     // 4. database operation
-    const response = await deps.createManyExampleRepository.handle(entities)
+    const response = await deps.createManyUserRepository.handle(entities)
     // 5. output
     return {
       inserted_ids: response.inserted_ids,

@@ -9,65 +9,41 @@ const makeRouter = async (routerInput: IBaseAppInput) => {
   const router = Router()
 
   router.post(
-    '/',
+    '/signup',
     await makeController({
-      controller: controller.createExampleController,
+      controller: controller.signupController,
       dbConnection: routerInput.dbConnection,
     }),
   )
-  router.get(
-    '/',
-    await makeController({
-      controller: controller.retrieveAllExampleController,
-      dbConnection: routerInput.dbConnection,
-    }),
-  )
-  router.get(
-    '/:id',
-    await makeController({
-      controller: controller.retrieveExampleController,
-      dbConnection: routerInput.dbConnection,
-    }),
-  )
-  router.patch(
-    '/:id',
-    await makeController({
-      controller: controller.updateExampleController,
-      dbConnection: routerInput.dbConnection,
-    }),
-  )
-  router.delete(
-    '/:id',
-    await makeController({
-      controller: controller.deleteExampleController,
-      dbConnection: routerInput.dbConnection,
-    }),
-  )
+
   router.post(
-    '/create-many',
+    '/signin',
     await makeController({
-      controller: controller.createManyExampleController,
+      controller: controller.signinController,
       dbConnection: routerInput.dbConnection,
     }),
   )
+
   router.post(
-    '/update-many',
+    '/verify-email',
     await makeController({
-      controller: controller.updateManyExampleController,
+      controller: controller.verifyEmailController,
       dbConnection: routerInput.dbConnection,
     }),
   )
+
   router.post(
-    '/delete-many',
+    '/request-password',
     await makeController({
-      controller: controller.deleteManyExampleController,
+      controller: controller.requestPasswordController,
       dbConnection: routerInput.dbConnection,
     }),
   )
+
   router.post(
-    '/transaction',
+    '/is-email-exists',
     await makeController({
-      controller: controller.transactionExampleController,
+      controller: controller.isEmailExistsController,
       dbConnection: routerInput.dbConnection,
     }),
   )

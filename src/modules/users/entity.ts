@@ -1,13 +1,30 @@
-import { type IExampleEntity } from './interface'
+import { type IUserEntity } from './interface'
 
-export const collectionName = 'examples'
+export const collectionName = 'users'
 
-export type TypeFieldDate = 'created_date' | 'updated_date'
+export class UserEntity {
+  constructor(public data: IUserEntity) {}
 
-export class ExampleEntity {
-  constructor(public data: IExampleEntity) {}
+  public trimmedUsername() {
+    this.data.trimmed_username = this.data.username?.split(' ').join('').toLocaleLowerCase()
+  }
 
-  public generateDate(field: TypeFieldDate) {
-    this.data[field] = new Date()
+  public trimmedEmail() {
+    if (!this.data.email) {
+      return
+    }
+    // separate prefix / username and domain
+    let prefix = this.data.email.split('@')[0]
+    const domain = this.data.email.split('@')[1]
+    if (!domain) {
+      return
+    }
+    // remove dot
+    prefix = prefix.split('.').join('')
+    // remove email subaddressing, also known as plus sign (+) trick,
+    // is popularized by Gmail and now supported by most email providers
+    prefix = prefix.split('+')[0]
+    // combine prefix and domain
+    this.data.trimmed_email = `${prefix.toLocaleLowerCase()}@${domain.toLocaleLowerCase()}`
   }
 }

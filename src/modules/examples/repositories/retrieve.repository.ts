@@ -10,8 +10,8 @@ export interface IRetrieveExampleOutput {
   _id: string
   name: string
   phone: string
-  created_date: string
-  updated_date: string
+  created_at: string
+  updated_at: string
 }
 
 export class RetrieveExampleRepository implements IRetrieveExampleRepository {
@@ -26,8 +26,8 @@ export class RetrieveExampleRepository implements IRetrieveExampleRepository {
       _id: response._id,
       name: response['name'] as string,
       phone: response['phone'] as string,
-      created_date: response['created_date'] as string,
-      updated_date: response['updated_date'] as string,
+      created_at: response['created_at'] as string,
+      updated_at: response['updated_at'] as string,
     }
   }
 }

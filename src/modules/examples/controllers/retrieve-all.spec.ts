@@ -31,7 +31,7 @@ describe('retrieve all examples', async () => {
     expect(response.body.data.length).toStrictEqual(3)
     expect(response.body.data[0]._id).toBeDefined()
     expect(response.body.data[0].name).toStrictEqual(examples.data[0]['name'])
-    expect(isValid(new Date(response.body.data[0].created_date))).toBeTruthy()
+    expect(isValid(new Date(response.body.data[0].created_at))).toBeTruthy()
     expect(response.body.data[1].name).toStrictEqual(examples.data[1]['name'])
     expect(response.body.data[2].name).toStrictEqual(examples.data[2]['name'])
 
@@ -155,9 +155,9 @@ describe('retrieve all examples', async () => {
     expect(response.body.data[0].status).toBeUndefined()
     expect(response.body.data[1].status).toBeUndefined()
     expect(response.body.data[2].status).toBeUndefined()
-    expect(response.body.data[0].created_date).toBeUndefined()
-    expect(response.body.data[1].created_date).toBeUndefined()
-    expect(response.body.data[2].created_date).toBeUndefined()
+    expect(response.body.data[0].created_at).toBeUndefined()
+    expect(response.body.data[1].created_at).toBeUndefined()
+    expect(response.body.data[2].created_at).toBeUndefined()
 
     expect(response.body.pagination.page).toStrictEqual(1)
     expect(response.body.pagination.page_size).toStrictEqual(10)

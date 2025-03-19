@@ -3,8 +3,8 @@ import type { ISchemaValidation } from '@point-hub/papi'
 
 import type { IUniqueValidation } from '@/utils/unique-validation'
 
-import { collectionName, ExampleEntity } from '../entity'
-import type { IUpdateExampleRepository } from '../repositories/update.repository'
+import { collectionName, UserEntity } from '../entity'
+import type { IUpdateUserRepository } from '../repositories/update.repository'
 import { updateValidation } from '../validations/update.validation'
 
 export interface IInput {
@@ -17,7 +17,7 @@ export interface IInput {
 
 export interface IDeps {
   schemaValidation: ISchemaValidation
-  updateExampleRepository: IUpdateExampleRepository
+  updateUserRepository: IUpdateUserRepository
   uniqueValidation: IUniqueValidation
   objClean: IObjClean
 }
@@ -27,21 +27,19 @@ export interface IOutput {
   modified_count: number
 }
 
-export class UpdateExampleUseCase {
+export class UpdateUserUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. validate unique
     await deps.uniqueValidation.handle(collectionName, { name: input.data.name }, input._id)
     // 2. validate schema
     await deps.schemaValidation(input.data, updateValidation)
     // 3. define entity
-    const exampleEntity = new ExampleEntity({
+    const userEntity = new UserEntity({
       name: input.data.name,
-      phone: input.data.phone,
     })
-    exampleEntity.generateDate('updated_date')
-    exampleEntity.data = deps.objClean(exampleEntity.data)
+    userEntity.data = deps.objClean(userEntity.data)
     // 4. database operation
-    const response = await deps.updateExampleRepository.handle(input._id, exampleEntity.data)
+    const response = await deps.updateUserRepository.handle(input._id, userEntity.data)
     // 5. output
     return {
       matched_count: response.matched_count,

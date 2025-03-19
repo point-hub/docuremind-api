@@ -11,63 +11,56 @@ const makeRouter = async (routerInput: IBaseAppInput) => {
   router.post(
     '/',
     await makeController({
-      controller: controller.createExampleController,
+      controller: controller.createUserController,
       dbConnection: routerInput.dbConnection,
     }),
   )
   router.get(
     '/',
     await makeController({
-      controller: controller.retrieveAllExampleController,
+      controller: controller.retrieveAllUserController,
       dbConnection: routerInput.dbConnection,
     }),
   )
   router.get(
     '/:id',
     await makeController({
-      controller: controller.retrieveExampleController,
+      controller: controller.retrieveUserController,
       dbConnection: routerInput.dbConnection,
     }),
   )
   router.patch(
     '/:id',
     await makeController({
-      controller: controller.updateExampleController,
+      controller: controller.updateUserController,
       dbConnection: routerInput.dbConnection,
     }),
   )
   router.delete(
     '/:id',
     await makeController({
-      controller: controller.deleteExampleController,
+      controller: controller.deleteUserController,
       dbConnection: routerInput.dbConnection,
     }),
   )
   router.post(
     '/create-many',
     await makeController({
-      controller: controller.createManyExampleController,
+      controller: controller.createManyUserController,
       dbConnection: routerInput.dbConnection,
     }),
   )
   router.post(
     '/update-many',
     await makeController({
-      controller: controller.updateManyExampleController,
+      controller: controller.updateManyUserController,
       dbConnection: routerInput.dbConnection,
     }),
   )
   router.post(
     '/delete-many',
     await makeController({
-      controller: controller.deleteManyExampleController,
-      dbConnection: routerInput.dbConnection,
-    }),
-  )
-  router.post(
-    '/transaction',
-    await makeController({
-      controller: controller.transactionExampleController,
+      controller: controller.deleteManyUserController,
       dbConnection: routerInput.dbConnection,
     }),
   )

@@ -1,8 +1,8 @@
 import type { IObjClean } from '@point-hub/express-utils'
 import type { IDocument, ISchemaValidation } from '@point-hub/papi'
 
-import { ExampleEntity } from '../entity'
-import type { IUpdateManyExampleRepository } from '../repositories/update-many.repository'
+import { UserEntity } from '../entity'
+import type { IUpdateManyUserRepository } from '../repositories/update-many.repository'
 import { updateManyValidation } from '../validations/update-many.validation'
 
 export interface IInput {
@@ -15,7 +15,7 @@ export interface IInput {
 
 export interface IDeps {
   schemaValidation: ISchemaValidation
-  updateManyExampleRepository: IUpdateManyExampleRepository
+  updateManyUserRepository: IUpdateManyUserRepository
   objClean: IObjClean
 }
 
@@ -28,19 +28,19 @@ export interface IOutput {
   modified_count: number
 }
 
-export class UpdateManyExampleUseCase {
+export class UpdateManyUserUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. validate schema
     await deps.schemaValidation(input.data, updateManyValidation)
     // 2. define entity
-    const exampleEntity = new ExampleEntity({
+    const userEntity = new UserEntity({
       name: input.data.name,
       phone: input.data.phone,
     })
-    exampleEntity.generateDate('updated_date')
-    exampleEntity.data = deps.objClean(exampleEntity.data)
+    userEntity.generateDate('updated_at')
+    userEntity.data = deps.objClean(userEntity.data)
     // 3. database operation
-    const response = await deps.updateManyExampleRepository.handle(input.filter, exampleEntity.data)
+    const response = await deps.updateManyUserRepository.handle(input.filter, userEntity.data)
     // 4. output
     return {
       matched_count: response.matched_count,

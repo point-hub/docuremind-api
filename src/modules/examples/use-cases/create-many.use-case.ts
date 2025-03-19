@@ -39,7 +39,7 @@ export class CreateManyExampleUseCase {
         name: document.name,
         phone: document.phone,
       })
-      exampleEntity.generateDate('created_date')
+      exampleEntity.generateDate('created_at')
       exampleEntity.data = deps.objClean(exampleEntity.data)
       entities.push(exampleEntity.data)
     }

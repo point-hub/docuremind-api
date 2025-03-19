@@ -14,7 +14,7 @@ export default class ExampleFactory extends BaseFactory<IExampleEntity> {
     return {
       name: faker.person.fullName(),
       phone: faker.phone.number(),
-      created_date: new Date(),
+      created_at: new Date(),
     }
   }
 

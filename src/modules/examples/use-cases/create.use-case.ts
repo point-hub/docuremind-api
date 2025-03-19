@@ -34,7 +34,7 @@ export class CreateExampleUseCase {
       name: input.name,
       phone: input.phone,
     })
-    exampleEntity.generateDate('created_date')
+    exampleEntity.generateDate('created_at')
     exampleEntity.data = deps.objClean(exampleEntity.data)
     // 4. database operation
     const response = await deps.createExampleRepository.handle(exampleEntity.data)

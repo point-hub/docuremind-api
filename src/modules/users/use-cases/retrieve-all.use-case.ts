@@ -1,18 +1,18 @@
 import type { IQuery } from '@point-hub/papi'
 
-import type { IRetrieveExampleOutput } from '../repositories/retrieve.repository'
-import type { IRetrieveAllExampleRepository } from '../repositories/retrieve-all.repository'
+import type { IRetrieveUserOutput } from '../repositories/retrieve.repository'
+import type { IRetrieveAllUserRepository } from '../repositories/retrieve-all.repository'
 
 export interface IInput {
   query: IQuery
 }
 
 export interface IDeps {
-  retrieveAllExampleRepository: IRetrieveAllExampleRepository
+  retrieveAllUserRepository: IRetrieveAllUserRepository
 }
 
 export interface IOutput {
-  data: IRetrieveExampleOutput[]
+  data: IRetrieveUserOutput[]
   pagination: {
     page: number
     page_count: number
@@ -21,10 +21,10 @@ export interface IOutput {
   }
 }
 
-export class RetrieveAllExampleUseCase {
+export class RetrieveAllUserUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. database operation
-    const response = await deps.retrieveAllExampleRepository.handle(input.query)
+    const response = await deps.retrieveAllUserRepository.handle(input.query)
     // 2. output
     return {
       data: response.data,

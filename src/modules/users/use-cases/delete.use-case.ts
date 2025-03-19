@@ -1,6 +1,6 @@
 import type { ISchemaValidation } from '@point-hub/papi'
 
-import type { IDeleteExampleRepository } from '../repositories/delete.repository'
+import type { IDeleteUserRepository } from '../repositories/delete.repository'
 import { deleteValidation } from '../validations/delete.validation'
 
 export interface IInput {
@@ -9,19 +9,19 @@ export interface IInput {
 
 export interface IDeps {
   schemaValidation: ISchemaValidation
-  deleteExampleRepository: IDeleteExampleRepository
+  deleteUserRepository: IDeleteUserRepository
 }
 
 export interface IOutput {
   deleted_count: number
 }
 
-export class DeleteExampleUseCase {
+export class DeleteUserUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. validate schema
     await deps.schemaValidation(input, deleteValidation)
     // 2. database operation
-    const response = await deps.deleteExampleRepository.handle(input._id)
+    const response = await deps.deleteUserRepository.handle(input._id)
     // 3. output
     return { deleted_count: response.deleted_count }
   }

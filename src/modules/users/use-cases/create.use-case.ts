@@ -3,8 +3,8 @@ import type { ISchemaValidation } from '@point-hub/papi'
 
 import type { IUniqueValidation } from '@/utils/unique-validation'
 
-import { collectionName, ExampleEntity } from '../entity'
-import type { ICreateExampleRepository } from '../repositories/create.repository'
+import { collectionName, UserEntity } from '../entity'
+import type { ICreateUserRepository } from '../repositories/create.repository'
 import { createValidation } from '../validations/create.validation'
 
 export interface IInput {
@@ -13,7 +13,7 @@ export interface IInput {
 }
 
 export interface IDeps {
-  createExampleRepository: ICreateExampleRepository
+  createUserRepository: ICreateUserRepository
   schemaValidation: ISchemaValidation
   uniqueValidation: IUniqueValidation
   objClean: IObjClean
@@ -23,21 +23,18 @@ export interface IOutput {
   inserted_id: string
 }
 
-export class CreateExampleUseCase {
+export class CreateUserUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. validate unique
     await deps.uniqueValidation.handle(collectionName, { name: input.name })
     // 2. validate schema
     await deps.schemaValidation(input, createValidation)
     // 3. define entity
-    const exampleEntity = new ExampleEntity({
+    const userEntity = new UserEntity({
       name: input.name,
-      phone: input.phone,
     })
-    exampleEntity.generateDate('created_date')
-    exampleEntity.data = deps.objClean(exampleEntity.data)
     // 4. database operation
-    const response = await deps.createExampleRepository.handle(exampleEntity.data)
+    const response = await deps.createUserRepository.handle(userEntity.data)
     // 5. output
     return { inserted_id: response.inserted_id }
   }

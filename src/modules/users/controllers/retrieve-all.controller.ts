@@ -1,20 +1,20 @@
 import type { IController, IControllerInput } from '@point-hub/papi'
 
-import { RetrieveAllExampleRepository } from '../repositories/retrieve-all.repository'
-import { RetrieveAllExampleUseCase } from '../use-cases/retrieve-all.use-case'
+import { RetrieveAllUserRepository } from '../repositories/retrieve-all.repository'
+import { RetrieveAllUserUseCase } from '../use-cases/retrieve-all.use-case'
 
-export const retrieveAllExampleController: IController = async (controllerInput: IControllerInput) => {
+export const retrieveAllUserController: IController = async (controllerInput: IControllerInput) => {
   let session
   try {
     // 1. start session for transactional
     session = controllerInput.dbConnection.startSession()
     session.startTransaction()
     // 2. define repository
-    const retrieveAllExampleRepository = new RetrieveAllExampleRepository(controllerInput.dbConnection)
+    const retrieveAllUserRepository = new RetrieveAllUserRepository(controllerInput.dbConnection)
     // 3. handle business rules
-    const response = await RetrieveAllExampleUseCase.handle(
+    const response = await RetrieveAllUserUseCase.handle(
       { query: controllerInput.httpRequest['query'] },
-      { retrieveAllExampleRepository },
+      { retrieveAllUserRepository },
     )
     await session.commitTransaction()
     // 4. return response to client
