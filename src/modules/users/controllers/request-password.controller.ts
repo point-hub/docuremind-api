@@ -8,7 +8,10 @@ import { schemaValidation } from '@/utils/validation'
 
 import { RetrieveMatchedEmailRepository } from '../repositories/retrieve-matched-email.repository'
 import { RequestPasswordUseCase } from '../use-cases/request-password.use-case'
-import { generateVerificationLink } from '../utils/generate-verification-link'
+
+const generateResetPasswordLink = (_id: string) => {
+  return _id
+}
 
 export const requestPasswordController: IController = async (controllerInput: IControllerInput) => {
   let session
@@ -31,6 +34,7 @@ export const requestPasswordController: IController = async (controllerInput: IC
         schemaValidation,
         renderHbsTemplate,
         sendEmail: sendMail,
+        generateResetPasswordLink,
       },
     )
 

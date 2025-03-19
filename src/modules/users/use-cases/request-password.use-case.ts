@@ -13,7 +13,7 @@ export interface IInput {
 
 export interface IDeps {
   retrieveMatchedEmailRepository: IRetrieveMatchedEmailRepository
-  generateResetPasswordLink: string
+  generateResetPasswordLink(_id: string): string
   schemaValidation: ISchemaValidation
   throwApiError: IThrowApiError
   sendEmail: ISendMail
