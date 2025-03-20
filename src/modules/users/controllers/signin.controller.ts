@@ -32,20 +32,22 @@ export const signinController: IController = async (controllerInput: IController
     // 4. return response to client
     const date = new Date()
     date.setDate(date.getDate() + 60)
+    const cookies = [
+      {
+        name: 'POINTHUB_ACCESS',
+        val: response.tokens.access_token,
+        options: {
+          secure: true,
+          httpOnly: true,
+          signed: true,
+          expires: date,
+        },
+      },
+    ]
+    console.log('return ', cookies)
     return {
       status: 200,
-      cookies: [
-        {
-          name: 'POINTHUB_ACCESS',
-          val: response.tokens.access_token,
-          options: {
-            secure: true,
-            httpOnly: true,
-            signed: true,
-            expires: date,
-          },
-        },
-      ],
+      cookies: cookies,
       json: {
         _id: response._id,
         email: response.email,

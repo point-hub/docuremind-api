@@ -42,6 +42,8 @@ export class RetrieveMatchedUsernameRepository implements IRetrieveMatchedUserna
       this.options,
     )
 
+    console.log(3, response)
+
     return {
       data: response.data as unknown as IRetrieveUserOutput[],
       pagination: response.pagination,
