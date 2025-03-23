@@ -13,6 +13,8 @@ import { signupValidation } from '../validations/signup.validation'
 export interface IOutput {
   inserted_id: string
   user_info: {
+    name: string
+    username: string
     email: string
   }
 }
@@ -72,6 +74,8 @@ export class SignupUseCase {
     return {
       inserted_id: responseSignup.inserted_id,
       user_info: {
+        name: responseUser.name,
+        username: responseUser.username,
         email: responseUser.email,
       },
     }

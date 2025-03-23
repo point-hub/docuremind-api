@@ -35,9 +35,8 @@ export class UpdateManyUserUseCase {
     // 2. define entity
     const userEntity = new UserEntity({
       name: input.data.name,
-      phone: input.data.phone,
+      updated_at: new Date(),
     })
-    userEntity.generateDate('updated_at')
     userEntity.data = deps.objClean(userEntity.data)
     // 3. database operation
     const response = await deps.updateManyUserRepository.handle(input.filter, userEntity.data)

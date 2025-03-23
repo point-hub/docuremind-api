@@ -19,13 +19,12 @@ export interface IDeps {
   generateAccessToken(_id: string): string
   generateRefreshToken(_id: string): string
 }
-export interface IOptions {
-  session?: unknown
-}
 interface IOutput {
+  _id: string
   email: string
   username: string
   name: string
+  cookies: object[]
   tokens: {
     token_type: string
     access_token: string
@@ -81,7 +80,6 @@ export class SigninUseCase {
         },
       },
     ]
-    console.log(cookies)
     // 6. return data
     return {
       _id: user.data._id as string,

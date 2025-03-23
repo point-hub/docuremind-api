@@ -39,9 +39,11 @@ export class VerifyTokenUseCase {
     }
     // 3. database operation
     const authUser = await deps.retrieveAuthUserRepository.handle(decodedToken.sub as string)
+    console.log(authUser)
     // 4. return response
     return {
       _id: authUser._id as string,
+      username: authUser.username as string,
       email: authUser.email as string,
       name: authUser.name as string,
     }

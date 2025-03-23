@@ -8,12 +8,13 @@ export interface IRetrieveUserRepository {
 
 export interface IRetrieveUserOutput {
   _id: string
+  username: string
   name: string
   email: string
   email_verification_code: string
   is_email_verified: boolean
-  created_at: string
-  updated_at: string
+  created_at: Date
+  updated_at: Date
 }
 
 export class RetrieveUserRepository implements IRetrieveUserRepository {
@@ -28,11 +29,12 @@ export class RetrieveUserRepository implements IRetrieveUserRepository {
     return {
       _id: response._id,
       name: response['name'] as string,
+      username: response['username'] as string,
       email: response['email'] as string,
       email_verification_code: response['email_verification_code'] as string,
       is_email_verified: response['is_email_verified'] as boolean,
-      created_at: response['created_at'] as string,
-      updated_at: response['updated_at'] as string,
+      created_at: response['created_at'] as Date,
+      updated_at: response['updated_at'] as Date,
     }
   }
 }

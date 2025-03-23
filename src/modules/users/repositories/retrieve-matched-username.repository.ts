@@ -1,4 +1,3 @@
-import { isDate } from '@point-hub/express-utils'
 import type { IDatabase, IPagination } from '@point-hub/papi'
 
 import { collectionName } from '../entity'
@@ -41,8 +40,6 @@ export class RetrieveMatchedUsernameRepository implements IRetrieveMatchedUserna
       },
       this.options,
     )
-
-    console.log(3, response)
 
     return {
       data: response.data as unknown as IRetrieveUserOutput[],
