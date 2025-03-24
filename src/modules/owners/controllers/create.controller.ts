@@ -1,7 +1,6 @@
 import { objClean } from '@point-hub/express-utils'
 import type { IController, IControllerInput } from '@point-hub/papi'
 
-import { GenerateMasterNumber } from '@/modules/counters/utils/generate-master-number'
 import type { IAuth } from '@/modules/users/interface'
 import { verifyUserToken } from '@/modules/users/utils/verify-user-token'
 import { UniqueValidation } from '@/utils/unique-validation'

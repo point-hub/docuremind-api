@@ -1,4 +1,3 @@
-import { objClean, tokenGenerate } from '@point-hub/express-utils'
 import type { IController, IControllerInput } from '@point-hub/papi'
 
 import pointhubConfig from '@/config/pointhub'
@@ -8,10 +7,7 @@ import { schemaValidation } from '@/utils/validation'
 
 import { RetrieveMatchedEmailRepository } from '../repositories/retrieve-matched-email.repository'
 import { RequestPasswordUseCase } from '../use-cases/request-password.use-case'
-
-const generateResetPasswordLink = (_id: string) => {
-  return _id
-}
+import { GenerateResetPassword } from '../utils/generate-reset-password-link'
 
 export const requestPasswordController: IController = async (controllerInput: IControllerInput) => {
   let session
@@ -21,11 +17,11 @@ export const requestPasswordController: IController = async (controllerInput: IC
     session.startTransaction()
     // 2. define repository
     const retrieveMatchedEmailRepository = new RetrieveMatchedEmailRepository(controllerInput.dbConnection, { session })
-
+    const generateResetPassword = new GenerateResetPassword(controllerInput.dbConnection, { session })
     // 3. handle business rules
     await RequestPasswordUseCase.handle(
       {
-        // pointhubSecret: pointhubConfig.secret,
+        pointhubSecret: pointhubConfig.secret,
         email: controllerInput.httpRequest['body']['email'],
       },
       {
@@ -34,7 +30,7 @@ export const requestPasswordController: IController = async (controllerInput: IC
         schemaValidation,
         renderHbsTemplate,
         sendEmail: sendMail,
-        generateResetPasswordLink,
+        generateResetPassword,
       },
     )
 

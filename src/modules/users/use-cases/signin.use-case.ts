@@ -86,6 +86,7 @@ export class SigninUseCase {
       email: user.data.email as string,
       username: user.data.username as string,
       name: user.data.name as string,
+      role: user.data.role as string,
       cookies: cookies,
       tokens: {
         token_type: 'Bearer',
