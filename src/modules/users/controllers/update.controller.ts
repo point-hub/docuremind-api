@@ -15,7 +15,7 @@ export const updateUserController: IController = async (controllerInput: IContro
     session.startTransaction()
     // 2. define repository
     const updateUserRepository = new UpdateUserRepository(controllerInput.dbConnection, { session })
-    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection)
+    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
     // 3. handle business rules
     const response = await UpdateUserUseCase.handle(
       {

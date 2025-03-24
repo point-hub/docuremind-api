@@ -1,6 +1,6 @@
 import type { IDatabase, IPipeline } from '@point-hub/papi'
 
-import { IAuthLookup } from '@/modules/users/interface'
+import { type IAuthLookup } from '@/modules/users/interface'
 
 import { collectionName } from '../entity'
 

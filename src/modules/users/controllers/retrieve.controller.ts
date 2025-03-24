@@ -20,13 +20,7 @@ export const retrieveUserController: IController = async (controllerInput: ICont
     // 4. return response to client
     return {
       status: 200,
-      json: {
-        _id: response._id,
-        name: response.name,
-        phone: response.phone,
-        created_at: response.created_at,
-        updated_at: response.updated_at,
-      },
+      json: response,
     }
   } catch (error) {
     await session?.abortTransaction()

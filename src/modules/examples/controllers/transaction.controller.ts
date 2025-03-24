@@ -30,7 +30,7 @@ export const transactionExampleController: IController = async (controllerInput:
     const updateManyExampleRepository = new UpdateManyExampleRepository(controllerInput.dbConnection, { session })
     const deleteExampleRepository = new DeleteExampleRepository(controllerInput.dbConnection, { session })
     const deleteManyExampleRepository = new DeleteManyExampleRepository(controllerInput.dbConnection, { session })
-    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection)
+    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
     // 3. handle business rules
     const responseCreate = await CreateExampleUseCase.handle(controllerInput.httpRequest['body'].new, {
       createExampleRepository,

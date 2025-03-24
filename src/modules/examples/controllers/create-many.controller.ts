@@ -15,7 +15,7 @@ export const createManyExampleController: IController = async (controllerInput: 
     session.startTransaction()
     // 2. define repository
     const createManyExampleRepository = new CreateManyExampleRepository(controllerInput.dbConnection, { session })
-    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection)
+    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
     // 3. handle business rules
     const response = await CreateManyExampleUseCase.handle(controllerInput.httpRequest['body'], {
       schemaValidation,

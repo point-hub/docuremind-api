@@ -5,5 +5,9 @@
 
 export const updateValidation = {
   _id: ['string'],
-  name: ['string'],
+  username: ['required', 'string'],
+  name: ['required', 'string'],
+  email: ['required', 'string'],
+  password: ['required', 'string'],
+  role: ['required', 'string'],
 }

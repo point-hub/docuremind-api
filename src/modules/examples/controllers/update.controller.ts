@@ -15,7 +15,7 @@ export const updateExampleController: IController = async (controllerInput: ICon
     session.startTransaction()
     // 2. define repository
     const updateExampleRepository = new UpdateExampleRepository(controllerInput.dbConnection, { session })
-    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection)
+    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
     // 3. handle business rules
     const response = await UpdateExampleUseCase.handle(
       {

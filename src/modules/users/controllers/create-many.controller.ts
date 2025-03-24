@@ -15,7 +15,7 @@ export const createManyUserController: IController = async (controllerInput: ICo
     session.startTransaction()
     // 2. define repository
     const createManyUserRepository = new CreateManyUserRepository(controllerInput.dbConnection, { session })
-    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection)
+    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
     // 3. handle business rules
     const response = await CreateManyUserUseCase.handle(controllerInput.httpRequest['body'], {
       schemaValidation,

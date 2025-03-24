@@ -15,7 +15,7 @@ export const createUserController: IController = async (controllerInput: IContro
     session.startTransaction()
     // 2. define repository
     const createUserRepository = new CreateUserRepository(controllerInput.dbConnection, { session })
-    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection)
+    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
     // 3. handle business rules
     const response = await CreateUserUseCase.handle(controllerInput.httpRequest['body'], {
       createUserRepository,

@@ -1,7 +1,7 @@
 import type { IDatabase, IPagination, IPipeline, IQuery } from '@point-hub/papi'
 
 import { collectionName } from '../entity'
-import { IRetrieveOwnerOutput } from './retrieve.repository'
+import type { IRetrieveOwnerOutput } from './retrieve.repository'
 
 export interface IRetrieveAllOwnerOutput {
   data: IRetrieveOwnerOutput[]
@@ -33,26 +33,13 @@ export class RetrieveAllOwnerRepository implements IRetrieveAllOwnerRepository {
   private aggregateFilters(query: IQuery) {
     const filtersAnd = []
 
-    if (query.filter?.search) {
+    if (query.filter?.['search']) {
       const filtersOr = []
-      filtersOr.push({ code: { $regex: query.filter?.search, $options: 'i' } })
-      filtersOr.push({ name: { $regex: query.filter?.search, $options: 'i' } })
-      filtersOr.push({ address: { $regex: query.filter?.search, $options: 'i' } })
-      filtersOr.push({ phone: { $regex: query.filter?.search, $options: 'i' } })
+      filtersOr.push({ name: { $regex: query.filter?.['search'], $options: 'i' } })
       filtersAnd.push({ $or: filtersOr })
     }
 
-    if (query.filter?.label) {
-      const filtersOr = []
-      filtersOr.push({ code: { $regex: query.filter?.label, $options: 'i' } })
-      filtersOr.push({ name: { $regex: query.filter?.label, $options: 'i' } })
-      filtersAnd.push({ $or: filtersOr })
-    }
-
-    if (query.filter?.code) filtersAnd.push({ code: { $regex: query.filter?.code, $options: 'i' } })
-    if (query.filter?.name) filtersAnd.push({ name: { $regex: query.filter?.name, $options: 'i' } })
-    if (query.filter?.address) filtersAnd.push({ address: { $regex: query.filter?.address, $options: 'i' } })
-    if (query.filter?.phone) filtersAnd.push({ phone: { $regex: query.filter?.phone, $options: 'i' } })
+    if (query.filter?.['name']) filtersAnd.push({ name: { $regex: query.filter?.['name'], $options: 'i' } })
 
     if (!filtersAnd.length) {
       return []

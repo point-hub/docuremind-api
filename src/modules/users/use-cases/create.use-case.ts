@@ -9,7 +9,10 @@ import { createValidation } from '../validations/create.validation'
 
 export interface IInput {
   name?: string
-  phone?: string
+  username?: string
+  email?: string
+  password?: string
+  role?: string
 }
 
 export interface IDeps {
@@ -32,7 +35,14 @@ export class CreateUserUseCase {
     // 3. define entity
     const userEntity = new UserEntity({
       name: input.name,
+      username: input.username,
+      email: input.email,
+      password: input.password,
+      role: input.role,
+      created_at: new Date(),
     })
+    userEntity.trimmedEmail()
+    userEntity.trimmedUsername()
     // 4. database operation
     const response = await deps.createUserRepository.handle(userEntity.data)
     // 5. output

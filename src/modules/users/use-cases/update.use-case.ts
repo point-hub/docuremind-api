@@ -35,7 +35,12 @@ export class UpdateUserUseCase {
     await deps.schemaValidation(input.data, updateValidation)
     // 3. define entity
     const userEntity = new UserEntity({
+      username: input.data.username,
+      email: input.data.email,
       name: input.data.name,
+      role: input.data.role,
+      password: input.data.password,
+      updated_at: new Date(),
     })
     userEntity.data = deps.objClean(userEntity.data)
     // 4. database operation

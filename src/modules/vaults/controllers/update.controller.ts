@@ -15,7 +15,7 @@ export const updateVaultController: IController = async (controllerInput: IContr
     session = controllerInput.dbConnection.startSession()
     session.startTransaction()
     // 2. define repository
-    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection)
+    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
     const updateVaultRepository = new UpdateVaultRepository(controllerInput.dbConnection, { session })
     // 3. handle business rules
     // 3.1 check authenticated user
