@@ -1,0 +1,5 @@
+export { CreateVaultRepository } from './create.repository'
+export { DeleteVaultRepository } from './delete.repository'
+export { RetrieveVaultRepository } from './retrieve.repository'
+export { RetrieveAllVaultRepository } from './retrieve-all.repository'
+export { UpdateVaultRepository } from './update.repository'

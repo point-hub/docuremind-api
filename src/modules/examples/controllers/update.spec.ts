@@ -53,7 +53,6 @@ describe('update an example', async () => {
       name: faker.person.fullName(),
     }
     const response = await request(app).patch(`/v1/examples/${resultFactory.inserted_ids[1]}`).send(updateData)
-    console.log(response.status)
     // expect http response
     expect(response.statusCode).toEqual(200)
     // expect response json
