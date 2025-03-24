@@ -12,3 +12,18 @@ export interface IUserEntity {
   updated_at?: Date
   email_verified_at?: Date
 }
+
+export interface IAuthLookup {
+  lookup_from?: string
+  _id?: string
+  label?: string
+  email?: string
+}
+
+export interface IAuth {
+  _id?: string
+  label?: string
+  name?: string
+  username?: string
+  email?: string
+}

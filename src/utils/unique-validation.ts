@@ -23,6 +23,8 @@ export class UniqueValidation implements IUniqueValidation {
       this.options,
     )
 
+    console.log(response)
+
     if (response.data.length > 0) {
       const keys = Object.keys(filter)
       const keyString = keys.join(', ')

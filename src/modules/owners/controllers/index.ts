@@ -1,0 +1,5 @@
+export { createOwnerController } from './create.controller'
+export { deleteOwnerController } from './delete.controller'
+export { retrieveOwnerController } from './retrieve.controller'
+export { retrieveAllOwnerController } from './retrieve-all.controller'
+export { updateOwnerController } from './update.controller'

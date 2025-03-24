@@ -53,6 +53,7 @@ export const signinController: IController = async (controllerInput: IController
         email: response.email,
         username: response.username,
         name: response.name,
+        role: response.role,
         tokens: {
           token_type: response.tokens.token_type,
           access_token: response.tokens.access_token,

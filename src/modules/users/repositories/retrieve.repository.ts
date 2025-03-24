@@ -10,6 +10,7 @@ export interface IRetrieveUserOutput {
   _id: string
   username: string
   name: string
+  role: string
   email: string
   email_verification_code: string
   is_email_verified: boolean
@@ -29,6 +30,7 @@ export class RetrieveUserRepository implements IRetrieveUserRepository {
     return {
       _id: response._id,
       name: response['name'] as string,
+      role: response['role'] as string,
       username: response['username'] as string,
       email: response['email'] as string,
       email_verification_code: response['email_verification_code'] as string,

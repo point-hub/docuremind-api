@@ -1,6 +1,7 @@
 import express, { type Express, type Request, type Response } from 'express'
 
 import type { IBaseAppInput } from './app'
+import ownerRouter from './modules/owners/router'
 import userRouter from './modules/users/router'
 import authRouter from './modules/users/router-auth'
 import { renderHbsTemplate } from './utils/email'
@@ -14,6 +15,7 @@ export default async function (baseRouterInput: IBaseAppInput) {
    */
   app.use('/v1/users', await userRouter(baseRouterInput))
   app.use('/v1/auth', await authRouter(baseRouterInput))
+  app.use('/v1/owners', await ownerRouter(baseRouterInput))
 
   /**
    * Rendered email templates

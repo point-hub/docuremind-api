@@ -1,0 +1,5 @@
+export { CreateOwnerRepository } from './create.repository'
+export { DeleteOwnerRepository } from './delete.repository'
+export { RetrieveOwnerRepository } from './retrieve.repository'
+export { RetrieveAllOwnerRepository } from './retrieve-all.repository'
+export { UpdateOwnerRepository } from './update.repository'

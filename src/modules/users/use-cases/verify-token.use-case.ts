@@ -25,6 +25,7 @@ export interface IOutput {
   email: string
   username: string
   name: string
+  role: string
 }
 
 export class VerifyTokenUseCase {
@@ -46,6 +47,7 @@ export class VerifyTokenUseCase {
       username: authUser.username as string,
       email: authUser.email as string,
       name: authUser.name as string,
+      role: authUser.role as string,
     }
   }
 }
