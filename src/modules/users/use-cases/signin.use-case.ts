@@ -24,6 +24,7 @@ interface IOutput {
   email: string
   username: string
   name: string
+  role: string
   cookies: object[]
   tokens: {
     token_type: string

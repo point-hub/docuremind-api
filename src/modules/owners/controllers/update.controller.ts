@@ -1,6 +1,6 @@
 import type { IController, IControllerInput } from '@point-hub/papi'
 
-import { IAuth } from '@/modules/users/interface'
+import type { IAuth } from '@/modules/users/interface'
 import { verifyUserToken } from '@/modules/users/utils/verify-user-token'
 import { UniqueValidation } from '@/utils/unique-validation'
 import { schemaValidation } from '@/utils/validation'

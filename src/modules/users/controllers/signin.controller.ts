@@ -44,7 +44,7 @@ export const signinController: IController = async (controllerInput: IController
         },
       },
     ]
-    console.log('return ', cookies)
+
     return {
       status: 200,
       cookies: cookies,

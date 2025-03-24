@@ -21,10 +21,17 @@ export class GenerateResetPassword implements IGenerateResetPassword {
   ) {}
 
   async handle(document: IDocument): Promise<string> {
-    // await this.database
-    //   .collection(collectionName)
-    //   .create({ ...document, created_at: new Date() }, { ignoreUndefined: true, ...this.options })
+    const link = generateLink()
+    await this.database.collection('users').update(
+      document['_id'],
+      {
+        $set: {
+          reset_password_link: link,
+        },
+      },
+      { ignoreUndefined: true, ...this.options },
+    )
 
-    return `${apiConfig.clientUrl}`
+    return `${link}`
   }
 }
