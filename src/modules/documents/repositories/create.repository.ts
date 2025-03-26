@@ -16,6 +16,6 @@ export class CreateDocumentRepository implements ICreateDocumentRepository {
   ) {}
 
   async handle(document: IDocument): Promise<ICreateDocumentOutput> {
-    return await this.database.collection(collectionName).create(document, this.options)
+    return await this.database.collection(collectionName).create(document, { ...this.options, ignoreUndefined: true })
   }
 }

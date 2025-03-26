@@ -53,7 +53,7 @@ export class RetrieveDocumentRepository implements IRetrieveDocumentRepository {
       owner: response.data[0]['owner'] as IOption,
       vault: response.data[0]['vault'] as IOption,
       rack: `${response.data[0]['rack']}`,
-      notes: `${response.data[0]['notes']}`,
+      notes: response.data[0]['notes'] as string,
       status: `${response.data[0]['status']}`,
       created_by: response.data[0]['created_by'] as IAuthLookup,
       updated_by: response.data[0]['updated_by'] as IAuthLookup,

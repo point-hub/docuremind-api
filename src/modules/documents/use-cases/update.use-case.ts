@@ -11,7 +11,21 @@ export interface IInput {
   auth: IAuth
   _id: string
   data: {
-    name?: string
+    code: string
+    name: string
+    type: string
+    owner: {
+      _id: string
+      label: string
+    }
+    vault: {
+      _id: string
+      label: string
+    }
+    rack: string
+    notes: string
+    issued_date: Date
+    expired_date: Date
     updated_by: {
       _id: string
       label: string
@@ -38,7 +52,15 @@ export class UpdateDocumentUseCase {
     await deps.schemaValidation(input.data, updateValidation)
     // 2. define entity
     const documentEntity = new DocumentEntity({
+      code: input.data.code,
       name: input.data.name,
+      type: input.data.type,
+      owner: input.data.owner,
+      vault: input.data.vault,
+      rack: input.data.rack,
+      notes: input.data.notes,
+      issued_date: input.data.issued_date,
+      expired_date: input.data.expired_date,
       updated_by: {
         _id: input.auth._id,
         label: input.auth.name,

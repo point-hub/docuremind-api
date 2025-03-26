@@ -42,7 +42,7 @@ export class RetrieveDocumentUseCase {
       owner: response.owner,
       vault: response.vault,
       rack: response.rack,
-      notes: response.notes,
+      notes: response.notes ?? '',
       status: response.status,
       issued_date: response.issued_date,
       expired_date: response.expired_date,
