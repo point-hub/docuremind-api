@@ -4,25 +4,39 @@ import { type IAuthLookup } from '@/modules/users/interface'
 
 import { collectionName } from '../entity'
 
-export interface IRetrieveOwnerOutput {
+interface IOption {
   _id: string
+  label: string
+}
+
+export interface IRetrieveDocumentOutput {
+  _id: string
+  code: string
   name: string
+  type: string
+  owner: IOption
+  vault: IOption
+  rack: string
+  status: string
+  notes: string
   created_by: IAuthLookup
   updated_by: IAuthLookup
   created_at: Date
   updated_at: Date
+  issued_date: string
+  expired_date: string
 }
-export interface IRetrieveOwnerRepository {
-  handle(_id: string): Promise<IRetrieveOwnerOutput>
+export interface IRetrieveDocumentRepository {
+  handle(_id: string): Promise<IRetrieveDocumentOutput>
 }
 
-export class RetrieveOwnerRepository implements IRetrieveOwnerRepository {
+export class RetrieveDocumentRepository implements IRetrieveDocumentRepository {
   constructor(
     public database: IDatabase,
     public options?: Record<string, unknown>,
   ) {}
 
-  async handle(_id: string): Promise<IRetrieveOwnerOutput> {
+  async handle(_id: string): Promise<IRetrieveDocumentOutput> {
     const pipeline: IPipeline[] = []
 
     pipeline.push(...this.aggregateFilters(_id))
@@ -33,11 +47,20 @@ export class RetrieveOwnerRepository implements IRetrieveOwnerRepository {
 
     return {
       _id: `${response.data[0]['_id']}`,
+      code: `${response.data[0]['code']}`,
       name: `${response.data[0]['name']}`,
+      type: `${response.data[0]['type']}`,
+      owner: response.data[0]['owner'] as IOption,
+      vault: response.data[0]['vault'] as IOption,
+      rack: `${response.data[0]['rack']}`,
+      notes: `${response.data[0]['notes']}`,
+      status: `${response.data[0]['status']}`,
       created_by: response.data[0]['created_by'] as IAuthLookup,
       updated_by: response.data[0]['updated_by'] as IAuthLookup,
       created_at: response.data[0]['created_at'] as Date,
       updated_at: response.data[0]['updated_at'] as Date,
+      issued_date: response.data[0]['issued_date'] as string,
+      expired_date: response.data[0]['expired_date'] as string,
     }
   }
 

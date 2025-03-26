@@ -1,6 +1,7 @@
 import express, { type Express, type Request, type Response } from 'express'
 
 import type { IBaseAppInput } from './app'
+import documentRouter from './modules/documents/router'
 import ownerRouter from './modules/owners/router'
 import userRouter from './modules/users/router'
 import authRouter from './modules/users/router-auth'
@@ -18,6 +19,7 @@ export default async function (baseRouterInput: IBaseAppInput) {
   app.use('/v1/auth', await authRouter(baseRouterInput))
   app.use('/v1/owners', await ownerRouter(baseRouterInput))
   app.use('/v1/vaults', await vaultRouter(baseRouterInput))
+  app.use('/v1/documents', await documentRouter(baseRouterInput))
 
   /**
    * Rendered email templates

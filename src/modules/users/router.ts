@@ -43,28 +43,6 @@ const makeRouter = async (routerInput: IBaseAppInput) => {
       dbConnection: routerInput.dbConnection,
     }),
   )
-  router.post(
-    '/create-many',
-    await makeController({
-      controller: controller.createManyUserController,
-      dbConnection: routerInput.dbConnection,
-    }),
-  )
-  router.post(
-    '/update-many',
-    await makeController({
-      controller: controller.updateManyUserController,
-      dbConnection: routerInput.dbConnection,
-    }),
-  )
-  router.post(
-    '/delete-many',
-    await makeController({
-      controller: controller.deleteManyUserController,
-      dbConnection: routerInput.dbConnection,
-    }),
-  )
-
   return router
 }
 

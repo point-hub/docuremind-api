@@ -1,4 +1,4 @@
-import { IRetrieveVaultRepository } from '../repositories/retrieve.repository'
+import type { IRetrieveVaultRepository } from '../repositories/retrieve.repository'
 
 export interface IInput {
   _id: string

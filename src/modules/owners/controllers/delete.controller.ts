@@ -20,7 +20,7 @@ export const deleteOwnerController: IController = async (controllerInput: IContr
     await verifyUserToken(controllerInput, { session })
     // 3.2 delete
     const response = await DeleteOwnerUseCase.handle(
-      { _id: controllerInput.httpRequest['params'].id, reason: controllerInput.httpRequest['body'].reason },
+      { _id: controllerInput.httpRequest['params'].id },
       { schemaValidation, deleteOwnerRepository, throwApiError },
     )
     await session.commitTransaction()

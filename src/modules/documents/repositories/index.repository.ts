@@ -1,0 +1,5 @@
+export { CreateDocumentRepository } from './create.repository'
+export { DeleteDocumentRepository } from './delete.repository'
+export { RetrieveDocumentRepository } from './retrieve.repository'
+export { RetrieveAllDocumentRepository } from './retrieve-all.repository'
+export { UpdateDocumentRepository } from './update.repository'

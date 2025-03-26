@@ -1,6 +1,6 @@
 import { BaseFactory, type IDatabase } from '@point-hub/papi'
 
-import { IVaultEntity } from './interface'
+import { type IVaultEntity } from './interface'
 import { CreateVaultRepository } from './repositories/create.repository'
 import { CreateManyVaultRepository } from './repositories/create-many.repository'
 

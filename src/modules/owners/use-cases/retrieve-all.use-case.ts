@@ -1,7 +1,7 @@
 import type { IPagination, IQuery } from '@point-hub/papi'
 
-import { IRetrieveOwnerOutput } from '../repositories/retrieve.repository'
-import { IRetrieveAllOwnerRepository } from '../repositories/retrieve-all.repository'
+import { type IRetrieveOwnerOutput } from '../repositories/retrieve.repository'
+import { type IRetrieveAllOwnerRepository } from '../repositories/retrieve-all.repository'
 
 export interface IInput {
   query: IQuery

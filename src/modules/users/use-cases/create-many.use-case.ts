@@ -37,9 +37,7 @@ export class CreateManyUserUseCase {
       await deps.uniqueValidation.handle(collectionName, { name: document.name })
       const userEntity = new UserEntity({
         name: document.name,
-        phone: document.phone,
       })
-      userEntity.generateDate('created_at')
       userEntity.data = deps.objClean(userEntity.data)
       entities.push(userEntity.data)
     }

@@ -1,7 +1,7 @@
 import type { IPagination, IQuery } from '@point-hub/papi'
 
-import { IRetrieveVaultOutput } from '../repositories/retrieve.repository'
-import { IRetrieveAllVaultRepository } from '../repositories/retrieve-all.repository'
+import { type IRetrieveVaultOutput } from '../repositories/retrieve.repository'
+import { type IRetrieveAllVaultRepository } from '../repositories/retrieve-all.repository'
 
 export interface IInput {
   query: IQuery

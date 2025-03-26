@@ -11,7 +11,9 @@ export interface IInput {
   _id: string
   data: {
     name?: string
-    phone?: string
+    username?: string
+    email?: string
+    role?: string
   }
 }
 
@@ -39,7 +41,6 @@ export class UpdateUserUseCase {
       email: input.data.email,
       name: input.data.name,
       role: input.data.role,
-      password: input.data.password,
       updated_at: new Date(),
     })
     userEntity.data = deps.objClean(userEntity.data)

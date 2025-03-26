@@ -11,35 +11,35 @@ const makeRouter = async (routerInput: IBaseAppInput): Promise<Router> => {
   router.post(
     '/',
     await makeController({
-      controller: controller.createVaultController,
+      controller: controller.createDocumentController,
       dbConnection: routerInput.dbConnection,
     }),
   )
   router.get(
     '/',
     await makeController({
-      controller: controller.retrieveAllVaultController,
+      controller: controller.retrieveAllDocumentController,
       dbConnection: routerInput.dbConnection,
     }),
   )
   router.get(
     '/:id',
     await makeController({
-      controller: controller.retrieveVaultController,
+      controller: controller.retrieveDocumentController,
       dbConnection: routerInput.dbConnection,
     }),
   )
   router.patch(
     '/:id',
     await makeController({
-      controller: controller.updateVaultController,
+      controller: controller.updateDocumentController,
       dbConnection: routerInput.dbConnection,
     }),
   )
   router.post(
     '/:id/delete',
     await makeController({
-      controller: controller.deleteVaultController,
+      controller: controller.deleteDocumentController,
       dbConnection: routerInput.dbConnection,
     }),
   )

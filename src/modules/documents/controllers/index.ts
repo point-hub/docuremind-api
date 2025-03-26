@@ -1,0 +1,5 @@
+export { createDocumentController } from './create.controller'
+export { deleteDocumentController } from './delete.controller'
+export { retrieveDocumentController } from './retrieve.controller'
+export { retrieveAllDocumentController } from './retrieve-all.controller'
+export { updateDocumentController } from './update.controller'
