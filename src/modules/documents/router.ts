@@ -1,15 +1,20 @@
 import { Router } from 'express'
+import multer from 'multer'
 
 import { type IBaseAppInput } from '@/app'
 import { makeController } from '@/express'
 
 import * as controller from './controllers/index'
 
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
+
 const makeRouter = async (routerInput: IBaseAppInput): Promise<Router> => {
   const router = Router()
 
   router.post(
     '/',
+    upload.any(),
     await makeController({
       controller: controller.createDocumentController,
       dbConnection: routerInput.dbConnection,
@@ -31,6 +36,7 @@ const makeRouter = async (routerInput: IBaseAppInput): Promise<Router> => {
   )
   router.patch(
     '/:id',
+    upload.any(),
     await makeController({
       controller: controller.updateDocumentController,
       dbConnection: routerInput.dbConnection,

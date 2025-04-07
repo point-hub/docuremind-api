@@ -1,7 +1,9 @@
+import { tokenGenerate } from '@point-hub/express-utils'
 import type { ISchemaValidation } from '@point-hub/papi'
 
 import { type IAuth } from '@/modules/users/interface'
 import type { UniqueValidation } from '@/utils/unique-validation'
+import { uploadFile } from '@/utils/upload'
 
 import { DocumentEntity } from '../entity'
 import type { IUpdateDocumentRepository } from '../repositories/update.repository'
@@ -32,6 +34,13 @@ export interface IInput {
       email: string
     }
   }
+  files: {
+    fieldname: string
+    originalname: string
+    mimetype: string
+    buffer: Buffer
+    size: number
+  }[]
 }
 
 export interface IDeps {
@@ -47,11 +56,26 @@ export interface IOutput {
 
 export class UpdateDocumentUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
+    // https://stackoverflow.com/questions/56298481/how-to-fix-object-null-prototype-title-product
+    input.data = JSON.parse(JSON.stringify(input.data))
+    console.log(input.data)
+    console.log(input.files)
     // 1. validate schema
     await deps.uniqueValidation.handle('documents', { name: input.data.name }, input._id)
     await deps.schemaValidation(input.data, updateValidation)
     // 2. define entity
+    const mimeTypesMap = {
+      'image/jpeg': 'jpg',
+      'image/jpg': 'jpg',
+      'image/png': 'png',
+      'image/gif': 'gif',
+      'application/pdf': 'pdf',
+    }
+
+    const cover = `cover-${tokenGenerate()}.${mimeTypesMap[input.files[0].mimetype as unknown as keyof typeof mimeTypesMap]}`
+    await uploadFile(`${cover}`, input.files[0].buffer)
     const documentEntity = new DocumentEntity({
+      cover: cover,
       code: input.data.code,
       name: input.data.name,
       type: input.data.type,

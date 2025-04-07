@@ -26,6 +26,7 @@ export const createDocumentController: IController = async (controllerInput: ICo
       {
         auth: verifyTokenResponse as IAuth,
         data: controllerInput.httpRequest['body'],
+        files: controllerInput.httpRequest['files'],
       },
       {
         objClean,

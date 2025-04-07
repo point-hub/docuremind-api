@@ -21,6 +21,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/multer": "^1.4.12",
     "@types/supertest": "^6.0.2",
     "@types/validatorjs": "^3.15.5",
     "@typescript-eslint/eslint-plugin": "^8.25.0",
@@ -37,6 +38,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "3.726.1",
+    "@aws-sdk/s3-request-presigner": "^3.782.0",
     "@point-hub/express-utils": "0.2.10",
     "@point-hub/papi": "0.5.10",
     "compression": "^1.8.0",
@@ -47,6 +50,7 @@
     "express": "^4.21.2",
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.2",
     "validatorjs": "^3.22.1"
   }
 }

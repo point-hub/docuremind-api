@@ -26,6 +26,7 @@ export const updateDocumentController: IController = async (controllerInput: ICo
         auth: verifyTokenResponse as IAuth,
         _id: controllerInput.httpRequest['params'].id,
         data: controllerInput.httpRequest['body'],
+        files: controllerInput.httpRequest['files'],
       },
       { schemaValidation, updateDocumentRepository, uniqueValidation },
     )

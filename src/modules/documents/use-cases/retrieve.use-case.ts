@@ -1,3 +1,5 @@
+import { getFile } from '@/utils/upload'
+
 import { type IRetrieveDocumentRepository } from '../repositories/retrieve.repository'
 
 export interface IInput {
@@ -15,6 +17,8 @@ interface IOption {
 
 export interface IOutput {
   _id: string
+  cover: string
+  cover_url: string
   code: string
   name: string
   type: string
@@ -36,6 +40,8 @@ export class RetrieveDocumentUseCase {
     // 2. output
     return {
       _id: response._id,
+      cover: response.cover,
+      cover_url: (await getFile(response.cover)) as string,
       code: response.code,
       name: response.name,
       type: response.type,
