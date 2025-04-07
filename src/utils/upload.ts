@@ -22,6 +22,16 @@ export const uploadFile = async (filename: string, buffer: Buffer) => {
     Bucket: bucketName,
     Key: filename,
     Body: buffer,
+    ContentDisposition: 'inline',
+    ContentType: 'application/pdf',
+  }
+
+  if (filename.endsWith('pdf')) {
+    bucketParams.ContentType = 'application/pdf'
+  } else if (filename.endsWith('.jpg') || filename.endsWith('.jpeg')) {
+    bucketParams.ContentType = 'image/jpeg'
+  } else if (filename.endsWith('.png')) {
+    bucketParams.ContentType = 'image/png'
   }
 
   try {
@@ -41,7 +51,7 @@ export const getFile = async (filename: string) => {
 
   try {
     const presigned = await getSignedUrl(s3, command, {
-      expiresIn: 60,
+      expiresIn: 60 * 60, // 1 hour
     })
 
     console.log('Success', presigned)

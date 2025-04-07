@@ -1,6 +1,9 @@
 export interface IDocumentEntity {
   _id?: string
   cover?: string
+  cover_mime?: string
+  document?: string
+  document_mime?: string
   code?: string
   name?: string
   type?: string

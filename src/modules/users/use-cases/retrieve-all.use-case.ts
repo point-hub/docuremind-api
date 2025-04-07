@@ -25,7 +25,6 @@ export class RetrieveAllUserUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. database operation
     const response = await deps.retrieveAllUserRepository.handle(input.query)
-    console.log(response)
     // 2. output
     return {
       data: response.data,

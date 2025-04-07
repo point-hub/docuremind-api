@@ -63,11 +63,27 @@ export class CreateDocumentUseCase {
       'image/gif': 'gif',
       'application/pdf': 'pdf',
     }
+    const coverFile = input.files.find((f) => f.fieldname === 'cover')
+    const documentFile = input.files.find((f) => f.fieldname === 'document')
 
-    const cover = `cover-${tokenGenerate()}.${mimeTypesMap[input.files[0].mimetype as unknown as keyof typeof mimeTypesMap]}`
-    await uploadFile(`${cover}`, input.files[0].buffer)
+    if (!coverFile) {
+      throw new Error('Cover file is missing')
+    }
+
+    const coverMimeType = coverFile.mimetype
+    const cover = `cover-${tokenGenerate()}.${mimeTypesMap[coverFile.mimetype as unknown as keyof typeof mimeTypesMap]}`
+
+    if (!documentFile) {
+      throw new Error('Cover file is missing')
+    }
+    const documentMimeType = documentFile.mimetype
+    const document = `document-${tokenGenerate()}.${mimeTypesMap[documentFile.mimetype as unknown as keyof typeof mimeTypesMap]}`
+
     const documentEntity = new DocumentEntity({
       cover: cover,
+      cover_mime: coverMimeType,
+      document: document,
+      document_mime: documentMimeType,
       code: input.data.code,
       name: input.data.name,
       type: input.data.type,
@@ -86,6 +102,8 @@ export class CreateDocumentUseCase {
       created_at: new Date(),
     })
     documentEntity.data = deps.objClean(documentEntity.data)
+    await uploadFile(`${cover}`, coverFile.buffer)
+    await uploadFile(`${document}`, documentFile.buffer)
     // 3. database operation
     const response = await deps.createDocumentRepository.handle(documentEntity.data)
     // 4. output

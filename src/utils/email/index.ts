@@ -33,8 +33,7 @@ export const renderHbsTemplate: IRenderHbsTemplate = async (path: string, contex
 
 // Sending Mail
 export const sendMail: ISendMail = async (html: string, to: string, subject: string) => {
-  console.log('send email')
-  const response = await fetch(emailServiceConfig.endpoint, {
+  await fetch(emailServiceConfig.endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -43,5 +42,4 @@ export const sendMail: ISendMail = async (html: string, to: string, subject: str
       subject: subject,
     }),
   })
-  console.log(response)
 }

@@ -58,9 +58,9 @@ export class UpdateDocumentUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // https://stackoverflow.com/questions/56298481/how-to-fix-object-null-prototype-title-product
     input.data = JSON.parse(JSON.stringify(input.data))
-    console.log(input.data)
-    console.log(input.files)
+    console.log('input.data', input.data)
     // 1. validate schema
+    await deps.uniqueValidation.handle('documents', { code: input.data.code }, input._id)
     await deps.uniqueValidation.handle('documents', { name: input.data.name }, input._id)
     await deps.schemaValidation(input.data, updateValidation)
     // 2. define entity
@@ -72,10 +72,7 @@ export class UpdateDocumentUseCase {
       'application/pdf': 'pdf',
     }
 
-    const cover = `cover-${tokenGenerate()}.${mimeTypesMap[input.files[0].mimetype as unknown as keyof typeof mimeTypesMap]}`
-    await uploadFile(`${cover}`, input.files[0].buffer)
     const documentEntity = new DocumentEntity({
-      cover: cover,
       code: input.data.code,
       name: input.data.name,
       type: input.data.type,
@@ -92,6 +89,24 @@ export class UpdateDocumentUseCase {
       },
       updated_at: new Date(),
     })
+
+    const coverFile = input.files.find((f) => f.fieldname === 'cover')
+    if (coverFile) {
+      const coverMimeType = coverFile.mimetype
+      const cover = `cover-${tokenGenerate()}.${mimeTypesMap[coverFile.mimetype as unknown as keyof typeof mimeTypesMap]}`
+      documentEntity.data.cover = cover
+      documentEntity.data.cover_mime = coverMimeType
+      await uploadFile(`${cover}`, coverFile.buffer)
+    }
+
+    const documentFile = input.files.find((f) => f.fieldname === 'document')
+    if (documentFile) {
+      const documentMimeType = documentFile.mimetype
+      const document = `document-${tokenGenerate()}.${mimeTypesMap[documentFile.mimetype as unknown as keyof typeof mimeTypesMap]}`
+      documentEntity.data.document = document
+      documentEntity.data.document_mime = documentMimeType
+      await uploadFile(`${document}`, documentFile.buffer)
+    }
     // 3. database operation
     const response = await deps.updateDocumentRepository.handle(input._id, documentEntity.data)
     // 4. output

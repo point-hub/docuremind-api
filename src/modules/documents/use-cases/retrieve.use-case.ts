@@ -18,7 +18,11 @@ interface IOption {
 export interface IOutput {
   _id: string
   cover: string
+  cover_mime: string
   cover_url: string
+  document: string
+  document_mime: string
+  document_url: string
   code: string
   name: string
   type: string
@@ -41,7 +45,11 @@ export class RetrieveDocumentUseCase {
     return {
       _id: response._id,
       cover: response.cover,
+      cover_mime: response.cover_mime,
       cover_url: (await getFile(response.cover)) as string,
+      document: response.document,
+      document_mime: response.document_mime,
+      document_url: (await getFile(response.document)) as string,
       code: response.code,
       name: response.name,
       type: response.type,

@@ -34,7 +34,6 @@ export interface IOutput {
 export class CreateVaultUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. validate schema
-    console.log(input.data)
     await deps.uniqueValidation.handle('vaults', { code: input.data.code })
     await deps.uniqueValidation.handle('vaults', { name: input.data.name })
     await deps.schemaValidation(input.data, createValidation)

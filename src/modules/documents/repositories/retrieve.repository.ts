@@ -12,6 +12,9 @@ interface IOption {
 export interface IRetrieveDocumentOutput {
   _id: string
   cover: string
+  cover_mime: string
+  document: string
+  document_mime: string
   code: string
   name: string
   type: string
@@ -49,6 +52,9 @@ export class RetrieveDocumentRepository implements IRetrieveDocumentRepository {
     return {
       _id: `${response.data[0]['_id']}`,
       cover: `${response.data[0]['cover']}`,
+      cover_mime: `${response.data[0]['cover_mime']}`,
+      document: `${response.data[0]['document']}`,
+      document_mime: `${response.data[0]['document_mime']}`,
       code: `${response.data[0]['code']}`,
       name: `${response.data[0]['name']}`,
       type: `${response.data[0]['type']}`,
