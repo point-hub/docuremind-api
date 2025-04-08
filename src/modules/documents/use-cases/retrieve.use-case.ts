@@ -35,9 +35,14 @@ export interface IOutput {
   issued_date: string
   expired_date: string
   created_at: Date
-  updated_at: Date
   created_by: IAuthLookup
+  updated_at: Date
   updated_by: IAuthLookup
+  requested_at?: Date
+  requested_by?: IAuthLookup
+  reason_for_borrowing?: string
+  required_date?: string
+  return_due_date?: string
 }
 
 export class RetrieveDocumentUseCase {
@@ -64,9 +69,14 @@ export class RetrieveDocumentUseCase {
       issued_date: response.issued_date,
       expired_date: response.expired_date,
       created_at: response.created_at,
-      updated_at: response.updated_at,
       created_by: response.created_by,
+      updated_at: response.updated_at,
       updated_by: response.updated_by,
+      requested_at: response.requested_at,
+      requested_by: response.requested_by,
+      reason_for_borrowing: response.reason_for_borrowing,
+      required_date: response.required_date,
+      return_due_date: response.return_due_date,
     }
   }
 }
