@@ -36,8 +36,8 @@ export interface IOutput {
 export class UpdateVaultUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. validate schema
-    await deps.uniqueValidation.handle('vaults', { name: input.data.code }, input._id)
-    await deps.uniqueValidation.handle('vaults', { name: input.data.name }, input._id)
+    await deps.uniqueValidation.handle('vaults', { code: { $regex: input.data.code, $options: 'i' } }, input._id)
+    await deps.uniqueValidation.handle('vaults', { name: { $regex: input.data.name, $options: 'i' } }, input._id)
     await deps.schemaValidation(input.data, updateValidation)
     // 2. define entity
     const vaultEntity = new VaultEntity({

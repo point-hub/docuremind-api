@@ -30,7 +30,7 @@ export interface IOutput {
 export class CreateOwnerUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. validate schema
-    await deps.uniqueValidation.handle('owners', { name: input.data.name })
+    await deps.uniqueValidation.handle('owners', { name: { $regex: input.data.name, $options: 'i' } })
     await deps.schemaValidation(input.data, createValidation)
     // 2. define entity
     const ownerEntity = new OwnerEntity({
