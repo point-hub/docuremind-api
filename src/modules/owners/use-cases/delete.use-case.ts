@@ -27,7 +27,7 @@ export class DeleteOwnerUseCase {
     const hasRelationship = await deps.deleteOwnerRepository.hasRelationship(input._id)
     if (hasRelationship) {
       deps.throwApiError(400, {
-        message: 'owner_has_relationship',
+        message: 'Cannot delete this data because it is referenced in another document',
       })
     }
     // 3. database operation

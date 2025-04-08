@@ -24,7 +24,12 @@ export class DeleteVaultUseCase {
     // 1. validate schema
     await deps.schemaValidation(input, deleteValidation)
     // 2. check if doesn't have any relationship
-
+    const hasRelationship = await deps.deleteVaultRepository.hasRelationship(input._id)
+    if (hasRelationship) {
+      deps.throwApiError(400, {
+        message: 'Cannot delete this data because it is referenced in another document',
+      })
+    }
     // 3. database operation
     const response = await deps.deleteVaultRepository.handle(input._id)
     // 4. output
