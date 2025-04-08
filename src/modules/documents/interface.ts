@@ -7,8 +7,8 @@ export interface IDocumentEntity {
   code?: string
   name?: string
   type?: string
-  issued_date?: Date
-  expired_date?: Date
+  issued_date?: string
+  expired_date?: string
   owner?: {
     _id?: string
     label?: string
@@ -32,4 +32,14 @@ export interface IDocumentEntity {
   status?: string
   created_at?: Date
   updated_at?: Date
+  // Borrow
+  requested_by?: {
+    _id?: string
+    label?: string
+    email?: string
+  }
+  reason_for_borrowing?: string
+  required_date?: string
+  return_due_date?: string
+  requested_at?: Date
 }

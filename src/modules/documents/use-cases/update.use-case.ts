@@ -26,8 +26,8 @@ export interface IInput {
     }
     rack: string
     notes: string
-    issued_date: Date
-    expired_date: Date
+    issued_date: string
+    expired_date: string
     updated_by: {
       _id: string
       label: string

@@ -1,3 +1,4 @@
+export { BorrowDocumentRepository } from './borrow.repository'
 export { CreateDocumentRepository } from './create.repository'
 export { DeleteDocumentRepository } from './delete.repository'
 export { RetrieveDocumentRepository } from './retrieve.repository'
