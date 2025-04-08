@@ -60,7 +60,6 @@ export class UpdateDocumentUseCase {
     input.data = JSON.parse(JSON.stringify(input.data))
     // 1. validate schema
     await deps.uniqueValidation.handle('documents', { code: input.data.code }, input._id)
-    await deps.uniqueValidation.handle('documents', { name: input.data.name }, input._id)
     await deps.schemaValidation(input.data, updateValidation)
     // 2. define entity
     const mimeTypesMap = {
