@@ -24,7 +24,12 @@ export class DeleteOwnerUseCase {
     // 1. validate schema
     await deps.schemaValidation(input, deleteValidation)
     // 2. check if doesn't have any relationship
-
+    const hasRelationship = await deps.deleteOwnerRepository.hasRelationship(input._id)
+    if (hasRelationship) {
+      deps.throwApiError(400, {
+        message: 'owner_has_relationship',
+      })
+    }
     // 3. database operation
     const response = await deps.deleteOwnerRepository.handle(input._id)
     // 4. output

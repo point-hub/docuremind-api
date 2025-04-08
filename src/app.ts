@@ -31,9 +31,9 @@ export const createApp = async (appInput: IBaseAppInput) => {
   // Gzip compressing can greatly decrease the size of the response body
   app.use(compression())
   // Parse json request body
-  app.use(express.json())
+  app.use(express.json({ limit: '50mb' }))
   // Parse urlencoded request body
-  app.use(express.urlencoded({ extended: true }))
+  app.use(express.urlencoded({ extended: true, limit: '50mb' }))
   // Set security HTTP headers
   app.use(helmet())
   app.use(
