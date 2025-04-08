@@ -53,7 +53,7 @@ export class CreateDocumentUseCase {
     // https://stackoverflow.com/questions/56298481/how-to-fix-object-null-prototype-title-product
     input.data = JSON.parse(JSON.stringify(input.data))
     // 1. validate schema
-    await deps.uniqueValidation.handle('documents', { code: input.data.code })
+    await deps.uniqueValidation.handle('documents', { code: { $regex: input.data.code, $options: 'i' } })
     await deps.schemaValidation(input.data, createValidation)
     // 2. define entity
     const mimeTypesMap = {

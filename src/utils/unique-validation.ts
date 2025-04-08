@@ -13,6 +13,7 @@ export class UniqueValidation implements IUniqueValidation {
   ) {}
 
   async handle(collectionName: string, filter: IDocument, _id?: string): Promise<void> {
+    console.log(filter)
     const response = await this.database.collection(collectionName).retrieveAll(
       {
         filter: {
