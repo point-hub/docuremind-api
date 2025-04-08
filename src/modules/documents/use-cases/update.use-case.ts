@@ -58,7 +58,6 @@ export class UpdateDocumentUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // https://stackoverflow.com/questions/56298481/how-to-fix-object-null-prototype-title-product
     input.data = JSON.parse(JSON.stringify(input.data))
-    console.log('input.data', input.data)
     // 1. validate schema
     await deps.uniqueValidation.handle('documents', { code: input.data.code }, input._id)
     await deps.uniqueValidation.handle('documents', { name: input.data.name }, input._id)

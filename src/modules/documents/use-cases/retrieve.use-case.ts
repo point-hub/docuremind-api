@@ -1,3 +1,4 @@
+import type { IAuthLookup } from '@/modules/users/interface'
 import { getFile } from '@/utils/upload'
 
 import { type IRetrieveDocumentRepository } from '../repositories/retrieve.repository'
@@ -35,6 +36,8 @@ export interface IOutput {
   expired_date: string
   created_at: Date
   updated_at: Date
+  created_by: IAuthLookup
+  updated_by: IAuthLookup
 }
 
 export class RetrieveDocumentUseCase {
@@ -62,6 +65,8 @@ export class RetrieveDocumentUseCase {
       expired_date: response.expired_date,
       created_at: response.created_at,
       updated_at: response.updated_at,
+      created_by: response.created_by,
+      updated_by: response.updated_by,
     }
   }
 }
