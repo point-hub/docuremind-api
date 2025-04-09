@@ -35,7 +35,12 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
 
     if (query.filter?.['search']) {
       const filtersOr = []
+      filtersOr.push({ code: { $regex: query.filter?.['search'], $options: 'i' } })
       filtersOr.push({ name: { $regex: query.filter?.['search'], $options: 'i' } })
+      filtersOr.push({ 'owner.label': { $regex: query.filter?.['search'], $options: 'i' } })
+      filtersOr.push({ 'vault.label': { $regex: query.filter?.['search'], $options: 'i' } })
+      filtersOr.push({ rack: { $regex: query.filter?.['search'], $options: 'i' } })
+      filtersOr.push({ expired_date: { $regex: query.filter?.['search'], $options: 'i' } })
       filtersAnd.push({ $or: filtersOr })
     }
 

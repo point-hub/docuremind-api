@@ -24,7 +24,10 @@ export interface IInput {
       _id: string
       label: string
     }
-    rack: string
+    rack: {
+      _id: string
+      label: string
+    }
     notes: string
     issued_date: string
     expired_date: string

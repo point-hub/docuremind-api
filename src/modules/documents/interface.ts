@@ -17,7 +17,10 @@ export interface IDocumentEntity {
     _id?: string
     label?: string
   }
-  rack?: string
+  rack?: {
+    _id?: string
+    label?: string
+  }
   created_by?: {
     _id?: string
     label?: string

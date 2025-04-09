@@ -20,7 +20,7 @@ export interface IRetrieveDocumentOutput {
   type: string
   owner: IOption
   vault: IOption
-  rack: string
+  rack: IOption
   status: string
   notes: string
   created_by: IAuthLookup
@@ -64,7 +64,7 @@ export class RetrieveDocumentRepository implements IRetrieveDocumentRepository {
       type: `${response.data[0]['type']}`,
       owner: response.data[0]['owner'] as IOption,
       vault: response.data[0]['vault'] as IOption,
-      rack: `${response.data[0]['rack']}`,
+      rack: response.data[0]['rack'] as IOption,
       notes: response.data[0]['notes'] as string,
       status: `${response.data[0]['status']}`,
       created_by: response.data[0]['created_by'] as IAuthLookup,

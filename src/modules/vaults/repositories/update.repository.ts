@@ -17,6 +17,13 @@ export class UpdateVaultRepository implements IUpdateVaultRepository {
   ) {}
 
   async handle(_id: string, document: IDocument): Promise<IUpdateVaultOutput> {
+    await this.updateRelationship(_id, document)
     return await this.database.collection(collectionName).update(_id, { $set: document }, this.options)
+  }
+
+  private async updateRelationship(_id: string, document: IDocument): Promise<void> {
+    await this.database
+      .collection('documents')
+      .updateMany({ 'vault._id': _id }, { $set: { 'vault.label': document['name'] } }, this.options)
   }
 }

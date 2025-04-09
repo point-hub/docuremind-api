@@ -4,5 +4,5 @@ export const updateValidation = {
   type: ['required', 'string'],
   owner: ['required'],
   vault: ['required'],
-  rack: ['required', 'string'],
+  rack: ['required'],
 }

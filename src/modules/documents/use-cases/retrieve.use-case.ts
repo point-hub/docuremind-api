@@ -29,7 +29,7 @@ export interface IOutput {
   type: string
   owner: IOption
   vault: IOption
-  rack: string
+  rack: IOption
   notes: string
   status: string
   issued_date: string
