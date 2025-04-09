@@ -43,6 +43,9 @@ export const uploadFile = async (filename: string, buffer: Buffer) => {
 }
 
 export const getFile = async (filename: string) => {
+  if (filename === 'undefined' || !filename) {
+    return ''
+  }
   // Create the S3 command to get the object
   const command = new GetObjectCommand({
     Bucket: bucketName,
