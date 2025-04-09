@@ -23,6 +23,8 @@ export interface IRetrieveDocumentOutput {
   rack: IOption
   status: string
   notes: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  borrows: any[]
   created_by: IAuthLookup
   updated_by: IAuthLookup
   created_at: Date
@@ -66,6 +68,8 @@ export class RetrieveDocumentRepository implements IRetrieveDocumentRepository {
       vault: response.data[0]['vault'] as IOption,
       rack: response.data[0]['rack'] as IOption,
       notes: response.data[0]['notes'] as string,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      borrows: response.data[0]['borrows'] as unknown as any,
       status: `${response.data[0]['status']}`,
       created_by: response.data[0]['created_by'] as IAuthLookup,
       created_at: response.data[0]['created_at'] as Date,

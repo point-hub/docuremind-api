@@ -31,6 +31,8 @@ export interface IOutput {
   vault: IOption
   rack: IOption
   notes: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  borrows: any
   status: string
   issued_date: string
   expired_date: string
@@ -65,6 +67,7 @@ export class RetrieveDocumentUseCase {
       vault: response.vault,
       rack: response.rack,
       notes: response.notes ?? '',
+      borrows: response.borrows,
       status: response.status,
       issued_date: response.issued_date,
       expired_date: response.expired_date,

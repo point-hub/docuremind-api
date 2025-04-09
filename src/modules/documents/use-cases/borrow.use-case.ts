@@ -1,9 +1,9 @@
+import { tokenGenerate } from '@point-hub/express-utils'
 import type { ISchemaValidation } from '@point-hub/papi'
 
 import { type IAuth } from '@/modules/users/interface'
 import type { UniqueValidation } from '@/utils/unique-validation'
 
-import { DocumentEntity } from '../entity'
 import type { IBorrowDocumentRepository } from '../repositories/borrow.repository'
 import { borrowValidation } from '../validations/borrow.validation'
 
@@ -40,7 +40,8 @@ export class BorrowDocumentUseCase {
     // 1. validate schema
     await deps.schemaValidation(input.data, borrowValidation)
     // 2. define entity
-    const documentEntity = new DocumentEntity({
+    const documentEntity = {
+      _id: tokenGenerate(),
       reason_for_borrowing: input.data.reason_for_borrowing,
       required_date: input.data.required_date,
       return_due_date: input.data.return_due_date,
@@ -50,10 +51,11 @@ export class BorrowDocumentUseCase {
         email: input.auth.email,
       },
       requested_at: new Date(),
-    })
+      status: 'pending',
+    }
 
     // 3. database operation
-    const response = await deps.borrowDocumentRepository.handle(input._id, documentEntity.data)
+    const response = await deps.borrowDocumentRepository.handle(input._id, documentEntity)
     // 4. output
     return {
       matched_count: response.matched_count,

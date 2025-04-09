@@ -45,11 +45,19 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
     }
 
     if (query.filter?.['name']) filtersAnd.push({ name: { $regex: query.filter?.['name'], $options: 'i' } })
+    if (query.filter?.['expired']) {
+      // Get the current date and calculate the date 7 days later
+      const today = new Date()
+      const sevenDaysLater = new Date(today)
+      sevenDaysLater.setDate(today.getDate() + 7)
+
+      filtersAnd.push({ expired_date: { $lte: `${sevenDaysLater.toISOString()}` } })
+    }
 
     if (!filtersAnd.length) {
       return []
     }
-
+    // console.log({ $match: { $and: JSON.stringify(filtersAnd) } })
     return [{ $match: { $and: filtersAnd } }]
   }
 }

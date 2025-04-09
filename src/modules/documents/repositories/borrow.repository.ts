@@ -19,6 +19,6 @@ export class BorrowDocumentRepository implements IBorrowDocumentRepository {
   async handle(_id: string, document: IDocument): Promise<IBorrowDocumentOutput> {
     return await this.database
       .collection(collectionName)
-      .update(_id, { $set: document }, { ...this.options, ignoreUndefined: true })
+      .update(_id, { $push: { borrows: document } }, { ...this.options, ignoreUndefined: true })
   }
 }
