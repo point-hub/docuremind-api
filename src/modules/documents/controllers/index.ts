@@ -1,4 +1,6 @@
 export { borrowDocumentController } from './borrow.controller'
+export { borrowApproveDocumentController } from './borrow-approve.controller'
+export { borrowRejectDocumentController } from './borrow-reject.controller'
 export { createDocumentController } from './create.controller'
 export { deleteDocumentController } from './delete.controller'
 export { retrieveDocumentController } from './retrieve.controller'

@@ -54,10 +54,50 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
       filtersAnd.push({ expired_date: { $lte: `${sevenDaysLater.toISOString()}` } })
     }
 
+    if (query.filter?.['borrow_approval']) {
+      // Get the current date and calculate the date 7 days later
+      filtersAnd.push({ 'borrows.status': 'pending' })
+      return [
+        { $match: { $and: filtersAnd } },
+        {
+          $addFields: {
+            borrows: {
+              $filter: {
+                input: '$borrows', // The borrows array
+                as: 'borrow', // Temporary variable for each borrow item
+                cond: {
+                  $in: ['$$borrow.status', ['pending']], // Filter for approved or pending statuses
+                },
+              },
+            },
+          },
+        },
+      ]
+    }
+
+    if (query.filter?.['borrow_history']) {
+      // Get the current date and calculate the date 7 days later
+      const filterMatch = []
+      if (filtersAnd.length) {
+        filterMatch.push({ $match: { $and: filtersAnd } })
+      }
+      filterMatch.push({
+        $addFields: {
+          borrows: {
+            $filter: {
+              input: '$borrows',
+              as: 'borrow',
+              cond: { $eq: ['$$borrow.requested_by._id', query.filter?.['requested_by']] },
+            },
+          },
+        },
+      })
+      return filterMatch
+    }
+
     if (!filtersAnd.length) {
       return []
     }
-    // console.log({ $match: { $and: JSON.stringify(filtersAnd) } })
     return [{ $match: { $and: filtersAnd } }]
   }
 }

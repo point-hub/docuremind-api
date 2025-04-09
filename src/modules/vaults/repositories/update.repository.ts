@@ -27,10 +27,9 @@ export class UpdateVaultRepository implements IUpdateVaultRepository {
       .updateMany({ 'vault._id': _id }, { $set: { 'vault.label': document['name'] } }, this.options)
 
     for (const element of document['racks']) {
-      const res = await this.database
+      await this.database
         .collection('documents')
         .updateMany({ 'rack._id': element.code }, { $set: { 'rack.label': element.name } }, this.options)
-      console.log(res, element)
     }
   }
 }

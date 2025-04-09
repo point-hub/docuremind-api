@@ -50,6 +50,20 @@ const makeRouter = async (routerInput: IBaseAppInput): Promise<Router> => {
     }),
   )
   router.post(
+    '/:id/borrow-approve/:borrowId',
+    await makeController({
+      controller: controller.borrowApproveDocumentController,
+      dbConnection: routerInput.dbConnection,
+    }),
+  )
+  router.post(
+    '/:id/borrow-reject/:borrowId',
+    await makeController({
+      controller: controller.borrowRejectDocumentController,
+      dbConnection: routerInput.dbConnection,
+    }),
+  )
+  router.post(
     '/:id/delete',
     await makeController({
       controller: controller.deleteDocumentController,
