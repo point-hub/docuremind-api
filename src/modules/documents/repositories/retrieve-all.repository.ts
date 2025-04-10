@@ -66,7 +66,6 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
     console.log('is_expired', query.filter?.['is_expired'])
     if (query.filter?.['is_expired'] === 'expired') {
       const today = new Date()
-
       filtersAnd.push({
         expired_date: {
           $lte: today.toISOString(),
@@ -74,12 +73,12 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
       })
     }
 
-    if (query.filter?.['is_expired'] === 'expired_within_7_days') {
+    if (query.filter?.['is_expired'] === 'expired_7_days') {
       // Get the current date and calculate the date 7 days later
       const today = new Date()
       const sevenDaysLater = new Date(today)
       sevenDaysLater.setDate(today.getDate() + 7)
-
+      console.log('7days', sevenDaysLater.toISOString())
       filtersAnd.push({ expired_date: { $exists: true } })
       filtersAnd.push({ expired_date: { $lte: sevenDaysLater.toISOString() } })
     }
