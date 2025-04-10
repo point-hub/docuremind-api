@@ -38,8 +38,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.782.0",
-    "@aws-sdk/s3-request-presigner": "^3.782.0",
+    "@aws-sdk/client-s3": "3.726.1",
+    "@aws-sdk/s3-request-presigner": "3.726.1",
     "@point-hub/express-utils": "0.2.10",
     "@point-hub/papi": "0.5.11",
     "compression": "^1.8.0",
