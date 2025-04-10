@@ -95,6 +95,44 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
       ]
     }
 
+    if (query.filter?.['return_approval']) {
+      filtersAnd.push({ 'borrows.status': 'returning' })
+      return [
+        { $match: { $and: filtersAnd } },
+        {
+          $addFields: {
+            borrows: {
+              $filter: {
+                input: '$borrows',
+                as: 'borrow',
+                cond: {
+                  $in: ['$$borrow.status', ['returning']],
+                },
+              },
+            },
+          },
+        },
+        {
+          $unwind: '$borrows',
+        },
+        {
+          $addFields: {
+            borrow: '$borrows',
+          },
+        },
+        {
+          $project: {
+            borrows: 0, // Remove the original 'borrows' field
+          },
+        },
+        {
+          $sort: {
+            'borrow.required_date': 1,
+          },
+        },
+      ]
+    }
+
     if (query.filter?.['borrow_history']) {
       const filterMatch = []
 

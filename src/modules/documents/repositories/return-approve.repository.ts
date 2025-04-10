@@ -2,26 +2,26 @@ import type { IDatabase } from '@point-hub/papi'
 
 import { collectionName } from '../entity'
 
-export interface IReturnDocumentOutput {
+export interface IReturnApproveDocumentOutput {
   matched_count: number
   modified_count: number
 }
-export interface IReturnDocumentRepository {
-  handle(_id: string): Promise<IReturnDocumentOutput>
+export interface IReturnApproveDocumentRepository {
+  handle(_id: string): Promise<IReturnApproveDocumentOutput>
 }
 
-export class ReturnDocumentRepository implements IReturnDocumentRepository {
+export class ReturnApproveDocumentRepository implements IReturnApproveDocumentRepository {
   constructor(
     public database: IDatabase,
     public options?: Record<string, unknown>,
   ) {}
 
-  async handle(_id: string): Promise<IReturnDocumentOutput> {
+  async handle(_id: string): Promise<IReturnApproveDocumentOutput> {
     return await this.database
       .collection(collectionName)
       .updateMany(
         { 'borrows._id': _id },
-        { $set: { 'borrows.$.status': 'returning', 'borrows.$.returning_at': new Date() } },
+        { $set: { 'borrows.$.status': 'returned', status: 'available' } },
         { ...this.options },
       )
   }
