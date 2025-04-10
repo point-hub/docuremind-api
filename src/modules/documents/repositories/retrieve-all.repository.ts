@@ -23,6 +23,9 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
     pipeline.push(...this.aggregateFilters(query))
 
     const response = await this.database.collection(collectionName).aggregate(pipeline, query, this.options)
+    if (query.filter?.['borrow_history']) {
+      console.log(response)
+    }
 
     return {
       data: response.data as unknown as IRetrieveDocumentOutput[],
@@ -55,7 +58,6 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
     }
 
     if (query.filter?.['borrow_approval']) {
-      // Get the current date and calculate the date 7 days later
       filtersAnd.push({ 'borrows.status': 'pending' })
       return [
         { $match: { $and: filtersAnd } },
@@ -63,21 +65,39 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
           $addFields: {
             borrows: {
               $filter: {
-                input: '$borrows', // The borrows array
-                as: 'borrow', // Temporary variable for each borrow item
+                input: '$borrows',
+                as: 'borrow',
                 cond: {
-                  $in: ['$$borrow.status', ['pending']], // Filter for approved or pending statuses
+                  $in: ['$$borrow.status', ['pending']],
                 },
               },
             },
+          },
+        },
+        {
+          $unwind: '$borrows',
+        },
+        {
+          $addFields: {
+            borrow: '$borrows',
+          },
+        },
+        {
+          $project: {
+            borrows: 0, // Remove the original 'borrows' field
+          },
+        },
+        {
+          $sort: {
+            'borrow.required_date': 1,
           },
         },
       ]
     }
 
     if (query.filter?.['borrow_history']) {
-      // Get the current date and calculate the date 7 days later
       const filterMatch = []
+
       if (filtersAnd.length) {
         filterMatch.push({ $match: { $and: filtersAnd } })
       }
@@ -90,6 +110,24 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
               cond: { $eq: ['$$borrow.requested_by._id', query.filter?.['requested_by']] },
             },
           },
+        },
+      })
+      filterMatch.push({
+        $unwind: '$borrows',
+      })
+      filterMatch.push({
+        $addFields: {
+          borrow: '$borrows',
+        },
+      })
+      filterMatch.push({
+        $project: {
+          borrows: 0, // Remove the original 'borrows' field
+        },
+      })
+      filterMatch.push({
+        $sort: {
+          'borrow.required_date': -1,
         },
       })
       return filterMatch

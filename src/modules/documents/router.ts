@@ -43,6 +43,13 @@ const makeRouter = async (routerInput: IBaseAppInput): Promise<Router> => {
     }),
   )
   router.post(
+    '/:id/return',
+    await makeController({
+      controller: controller.returnDocumentController,
+      dbConnection: routerInput.dbConnection,
+    }),
+  )
+  router.post(
     '/:id/borrow',
     await makeController({
       controller: controller.borrowDocumentController,
