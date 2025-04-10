@@ -22,6 +22,8 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
 
     pipeline.push(...this.aggregateFilters(query))
 
+    console.log(JSON.stringify(pipeline))
+
     const response = await this.database.collection(collectionName).aggregate(pipeline, query, this.options)
     if (query.filter?.['borrow_history']) {
       console.log(response)
@@ -47,7 +49,12 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
       filtersAnd.push({ $or: filtersOr })
     }
 
+    if (query.filter?.['code']) filtersAnd.push({ code: { $regex: query.filter?.['code'], $options: 'i' } })
     if (query.filter?.['name']) filtersAnd.push({ name: { $regex: query.filter?.['name'], $options: 'i' } })
+    if (query.filter?.['owner']) filtersAnd.push({ 'owner.label': { $regex: query.filter?.['owner'], $options: 'i' } })
+    if (query.filter?.['vault']) filtersAnd.push({ 'vault.label': { $regex: query.filter?.['vault'], $options: 'i' } })
+    if (query.filter?.['rack']) filtersAnd.push({ 'rack.label': { $regex: query.filter?.['rack'], $options: 'i' } })
+
     if (query.filter?.['expired']) {
       // Get the current date and calculate the date 7 days later
       const today = new Date()
@@ -55,6 +62,29 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
       sevenDaysLater.setDate(today.getDate() + 7)
 
       filtersAnd.push({ expired_date: { $lte: `${sevenDaysLater.toISOString()}` } })
+    }
+    console.log('is_expired', query.filter?.['is_expired'])
+    if (query.filter?.['is_expired'] === 'expired') {
+      const today = new Date()
+
+      filtersAnd.push({
+        expired_date: {
+          $lte: today.toISOString(),
+        },
+      })
+    }
+
+    if (query.filter?.['is_expired'] === 'expired_within_7_days') {
+      // Get the current date and calculate the date 7 days later
+      const today = new Date()
+      const sevenDaysLater = new Date(today)
+      sevenDaysLater.setDate(today.getDate() + 7)
+
+      console.log('today', today.toISOString())
+      console.log('sevenDaysLater', sevenDaysLater.toISOString())
+
+      filtersAnd.push({ expired_date: { $exists: true } })
+      filtersAnd.push({ expired_date: { $lte: sevenDaysLater.toISOString() } })
     }
 
     if (query.filter?.['borrow_approval']) {
