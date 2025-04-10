@@ -36,6 +36,13 @@ const makeRouter = async (routerInput: IBaseAppInput) => {
       dbConnection: routerInput.dbConnection,
     }),
   )
+  router.post(
+    '/:id/update-password',
+    await makeController({
+      controller: controller.updatePasswordUserController,
+      dbConnection: routerInput.dbConnection,
+    }),
+  )
   router.delete(
     '/:id',
     await makeController({
