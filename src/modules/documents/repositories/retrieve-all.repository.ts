@@ -80,11 +80,12 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
       const sevenDaysLater = new Date(today)
       sevenDaysLater.setDate(today.getDate() + 7)
 
-      console.log('today', today.toISOString())
-      console.log('sevenDaysLater', sevenDaysLater.toISOString())
-
       filtersAnd.push({ expired_date: { $exists: true } })
       filtersAnd.push({ expired_date: { $lte: sevenDaysLater.toISOString() } })
+    }
+
+    if (query.filter?.['status'] && query.filter?.['status'] !== 'all') {
+      filtersAnd.push({ status: query.filter?.['status'] })
     }
 
     if (query.filter?.['borrow_approval']) {
