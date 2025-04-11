@@ -49,6 +49,14 @@ const makeRouter = async (routerInput: IBaseAppInput) => {
   )
 
   router.post(
+    '/reset-password',
+    await makeController({
+      controller: controller.resetPasswordController,
+      dbConnection: routerInput.dbConnection,
+    }),
+  )
+
+  router.post(
     '/is-email-exists',
     await makeController({
       controller: controller.isEmailExistsController,

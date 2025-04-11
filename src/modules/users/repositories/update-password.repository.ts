@@ -18,7 +18,6 @@ export class UpdatePasswordUserRepository implements IUpdatePasswordUserReposito
   ) {}
 
   async handle(_id: string, document: IDocument): Promise<IUpdatePasswordUserOutput> {
-    console.log(document)
     return await this.database
       .collection(collectionName)
       .update(_id, { $set: document }, { ignoreUndefined: true, ...this.options })
