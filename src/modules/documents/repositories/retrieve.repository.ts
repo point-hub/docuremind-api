@@ -13,8 +13,10 @@ export interface IRetrieveDocumentOutput {
   _id: string
   cover: string
   cover_mime: string
-  document: string
-  document_mime: string
+  document_files: {
+    document: string
+    document_mime: string
+  }[]
   code: string
   name: string
   type: string
@@ -59,8 +61,8 @@ export class RetrieveDocumentRepository implements IRetrieveDocumentRepository {
       _id: `${response.data[0]['_id']}`,
       cover: `${response.data[0]['cover']}`,
       cover_mime: `${response.data[0]['cover_mime']}`,
-      document: `${response.data[0]['document']}`,
-      document_mime: `${response.data[0]['document_mime']}`,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      document_files: response.data[0]['document_files'] as any,
       code: `${response.data[0]['code']}`,
       name: `${response.data[0]['name']}`,
       type: `${response.data[0]['type']}`,
@@ -69,7 +71,7 @@ export class RetrieveDocumentRepository implements IRetrieveDocumentRepository {
       rack: response.data[0]['rack'] as IOption,
       notes: response.data[0]['notes'] as string,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      borrows: response.data[0]['borrows'] as unknown as any,
+      borrows: response.data[0]['borrows'] as unknown as any[],
       status: `${response.data[0]['status']}`,
       created_by: response.data[0]['created_by'] as IAuthLookup,
       created_at: response.data[0]['created_at'] as Date,

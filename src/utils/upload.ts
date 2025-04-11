@@ -35,8 +35,7 @@ export const uploadFile = async (filename: string, buffer: Buffer) => {
   }
 
   try {
-    const data = await s3.send(new PutObjectCommand(bucketParams))
-    console.log('Success', data)
+    await s3.send(new PutObjectCommand(bucketParams))
   } catch (err) {
     console.log('Error', err)
   }
@@ -57,7 +56,7 @@ export const getFile = async (filename: string) => {
       expiresIn: 60 * 60, // 1 hour
     })
 
-    console.log('Success', presigned)
+    // console.log('Success', presigned)
     return presigned
   } catch (err) {
     console.log('Error', err)

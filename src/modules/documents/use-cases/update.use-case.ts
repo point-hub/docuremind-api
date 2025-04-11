@@ -13,6 +13,8 @@ export interface IInput {
   auth: IAuth
   _id: string
   data: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    document_files: any[]
     code: string
     name: string
     type: string
@@ -61,6 +63,7 @@ export class UpdateDocumentUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // https://stackoverflow.com/questions/56298481/how-to-fix-object-null-prototype-title-product
     input.data = JSON.parse(JSON.stringify(input.data))
+    console.log(input.files)
     // 1. validate schema
     await deps.uniqueValidation.handle('documents', { code: { $regex: input.data.code, $options: 'i' } }, input._id)
     await deps.schemaValidation(input.data, updateValidation)
@@ -99,17 +102,33 @@ export class UpdateDocumentUseCase {
       documentEntity.data.cover_mime = coverMimeType
       await uploadFile(`${cover}`, coverFile.buffer)
     }
-
-    const documentFile = input.files.find((f) => f.fieldname === 'document')
-    if (documentFile) {
-      const documentMimeType = documentFile.mimetype
-      const document = `document-${tokenGenerate()}.${mimeTypesMap[documentFile.mimetype as unknown as keyof typeof mimeTypesMap]}`
-      documentEntity.data.document = document
-      documentEntity.data.document_mime = documentMimeType
-      await uploadFile(`${document}`, documentFile.buffer)
+    console.log(input.files)
+    const documentFiles = input.files.filter((f) => f.fieldname === 'new_files[]')
+    const newFiles = []
+    console.log(documentFiles)
+    if (documentFiles) {
+      for (const documentFile of documentFiles) {
+        const documentMimeType = documentFile.mimetype
+        const document = `document-${tokenGenerate()}.${mimeTypesMap[documentFile.mimetype as unknown as keyof typeof mimeTypesMap]}`
+        newFiles.push({
+          document: document,
+          document_mime: documentMimeType,
+        })
+        await uploadFile(`${document}`, documentFile.buffer)
+      }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const keepFiles = input.data.document_files.map((doc: any) => doc.name)
+
+    console.log(input.data)
     // 3. database operation
-    const response = await deps.updateDocumentRepository.handle(input._id, documentEntity.data)
+    const response = await deps.updateDocumentRepository.handle(
+      input._id,
+      documentEntity.data,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      newFiles as any,
+      keepFiles as string[],
+    )
     // 4. output
     return {
       matched_count: response.matched_count,

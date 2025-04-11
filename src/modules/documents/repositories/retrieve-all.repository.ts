@@ -22,12 +22,7 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
 
     pipeline.push(...this.aggregateFilters(query))
 
-    console.log(JSON.stringify(pipeline))
-
     const response = await this.database.collection(collectionName).aggregate(pipeline, query, this.options)
-    if (query.filter?.['borrow_history']) {
-      console.log(response)
-    }
 
     return {
       data: response.data as unknown as IRetrieveDocumentOutput[],
@@ -63,7 +58,6 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
 
       filtersAnd.push({ expired_date: { $lte: `${sevenDaysLater.toISOString()}` } })
     }
-    console.log('is_expired', query.filter?.['is_expired'])
     if (query.filter?.['is_expired'] === 'expired') {
       const today = new Date()
       filtersAnd.push({
@@ -79,7 +73,6 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
       today.setHours(0, 0, 0, 0) // Set time to midnight
       const sevenDaysLater = new Date(today)
       sevenDaysLater.setDate(today.getDate() + 7)
-      console.log('7days', sevenDaysLater.toISOString())
       filtersAnd.push({ expired_date: { $exists: true } })
       filtersAnd.push({ expired_date: { $gte: today.toISOString() } })
       filtersAnd.push({ expired_date: { $lte: sevenDaysLater.toISOString() } })

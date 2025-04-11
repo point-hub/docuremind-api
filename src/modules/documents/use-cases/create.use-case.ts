@@ -94,13 +94,19 @@ export class CreateDocumentUseCase {
       await uploadFile(`${cover}`, coverFile.buffer)
     }
 
-    const documentFile = input.files.find((f) => f.fieldname === 'document')
-    if (documentFile) {
-      const documentMimeType = documentFile.mimetype
-      const document = `document-${tokenGenerate()}.${mimeTypesMap[documentFile.mimetype as unknown as keyof typeof mimeTypesMap]}`
-      documentEntity.data.document = document
-      documentEntity.data.document_mime = documentMimeType
-      await uploadFile(`${document}`, documentFile.buffer)
+    const documentFiles = input.files.filter((f) => f.fieldname === 'document_files[]')
+    documentEntity.data.document_files = []
+    if (documentFiles && documentFiles.length > 0) {
+      for (const documentFile of documentFiles) {
+        const documentMimeType = documentFile.mimetype
+        const document = `document-${tokenGenerate()}.${mimeTypesMap[documentFile.mimetype as unknown as keyof typeof mimeTypesMap]}`
+        documentEntity.data.document_files.push({
+          document: document,
+          document_mime: documentMimeType,
+        })
+
+        await uploadFile(`${document}`, documentFile.buffer)
+      }
     }
     documentEntity.data = deps.objClean(documentEntity.data)
 

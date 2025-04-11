@@ -21,9 +21,7 @@ export interface IOutput {
   cover: string
   cover_mime: string
   cover_url: string
-  document: string
-  document_mime: string
-  document_url: string
+  document_files: { name: string; mime: string; url: string }[]
   code: string
   name: string
   type: string
@@ -52,14 +50,20 @@ export class RetrieveDocumentUseCase {
     // 1. database operation
     const response = await deps.retrieveDocumentRepository.handle(input._id)
     // 2. output
+    const documentFiles = []
+    for (const documentFile of response.document_files) {
+      documentFiles.push({
+        name: documentFile.document,
+        mime: documentFile.document_mime,
+        url: (await getFile(documentFile.document)) as string,
+      })
+    }
     return {
       _id: response._id,
       cover: response.cover,
       cover_mime: response.cover_mime,
       cover_url: (await getFile(response.cover)) as string,
-      document: response.document,
-      document_mime: response.document_mime,
-      document_url: (await getFile(response.document)) as string,
+      document_files: documentFiles,
       code: response.code,
       name: response.name,
       type: response.type,
