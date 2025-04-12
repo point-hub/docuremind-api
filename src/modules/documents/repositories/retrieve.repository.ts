@@ -27,6 +27,8 @@ export interface IRetrieveDocumentOutput {
   notes: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   borrows: any[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  borrow?: any
   created_by: IAuthLookup
   updated_by: IAuthLookup
   created_at: Date

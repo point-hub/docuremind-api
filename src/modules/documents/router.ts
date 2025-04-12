@@ -28,6 +28,13 @@ const makeRouter = async (routerInput: IBaseAppInput): Promise<Router> => {
     }),
   )
   router.get(
+    '/reminder',
+    await makeController({
+      controller: controller.reminderController,
+      dbConnection: routerInput.dbConnection,
+    }),
+  )
+  router.get(
     '/:id',
     await makeController({
       controller: controller.retrieveDocumentController,
