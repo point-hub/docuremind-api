@@ -28,7 +28,7 @@ export default async function (baseRouterInput: IBaseAppInput) {
    * Access this in your browser using the following path:
    * /templates/modules/examples/emails/example
    */
-  app.get('/templates/*', async (req: Request, res: Response) => {
+  app.get('/templates', async (req: Request, res: Response) => {
     const html = await renderHbsTemplate(`${req.params[0]}.hbs`)
     res.send(html)
   })
