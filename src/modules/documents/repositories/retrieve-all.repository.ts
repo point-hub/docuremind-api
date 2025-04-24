@@ -1,5 +1,5 @@
 import type { IDatabase, IPagination, IPipeline, IQuery } from '@point-hub/papi'
-import qs from 'qs'
+import QueryString from 'qs'
 
 import { collectionName } from '../entity'
 import type { IRetrieveDocumentOutput } from './retrieve.repository'
@@ -33,8 +33,9 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
 
   private aggregateFilters(query: IQuery) {
     const filtersAnd = []
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    query = qs.parse(query as any)
+    query = QueryString.parse(query as any)
 
     if (query.filter?.['search']) {
       const filtersOr = []
