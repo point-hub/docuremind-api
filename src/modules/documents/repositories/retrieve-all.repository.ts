@@ -1,4 +1,5 @@
 import type { IDatabase, IPagination, IPipeline, IQuery } from '@point-hub/papi'
+import qs from 'qs'
 
 import { collectionName } from '../entity'
 import type { IRetrieveDocumentOutput } from './retrieve.repository'
@@ -32,6 +33,8 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
 
   private aggregateFilters(query: IQuery) {
     const filtersAnd = []
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    query = qs.parse(query as any)
 
     if (query.filter?.['search']) {
       const filtersOr = []
@@ -82,7 +85,9 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
       filtersAnd.push({ status: query.filter?.['status'] })
     }
 
+    // console.log(query.filter?.['borrow_approval'])
     if (query.filter?.['borrow_approval']) {
+      console.log('borrow_approval')
       filtersAnd.push({ 'borrows.status': 'pending' })
       return [
         { $match: { $and: filtersAnd } },

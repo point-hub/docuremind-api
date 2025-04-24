@@ -41,7 +41,7 @@ export class RetrieveAllUserRepository implements IRetrieveAllUserRepository {
       filtersOr.push({ role: { $regex: query.filter?.['search'], $options: 'i' } })
       filtersAnd.push({ $or: filtersOr })
     }
-    console.log('rpl', query.filter)
+
     if (query.filter?.['name']) filtersAnd.push({ name: { $regex: query.filter?.['name'], $options: 'i' } })
     if (query.filter?.['username']) filtersAnd.push({ username: { $regex: query.filter?.['username'], $options: 'i' } })
     if (query.filter?.['email']) filtersAnd.push({ email: { $regex: query.filter?.['email'], $options: 'i' } })
