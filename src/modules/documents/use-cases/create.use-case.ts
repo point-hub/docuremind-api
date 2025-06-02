@@ -54,14 +54,10 @@ export interface IOutput {
 export class CreateDocumentUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // https://stackoverflow.com/questions/56298481/how-to-fix-object-null-prototype-title-product
-    console.log('as', input.data)
     input.data = JSON.parse(JSON.stringify(input.data))
     // 1. validate schema
-    console.log('a')
     await deps.uniqueValidation.handle('documents', { code: { $regex: input.data.code, $options: 'i' } })
-    console.log('b')
     await deps.schemaValidation(input.data, createValidation)
-    console.log('c')
     // 2. define entity
     const mimeTypesMap = {
       'image/jpeg': 'jpg',

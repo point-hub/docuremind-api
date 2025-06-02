@@ -15,17 +15,13 @@ export const createDocumentController: IController = async (controllerInput: ICo
     // 1. start session for transactional
     session = controllerInput.dbConnection.startSession()
     session.startTransaction()
-    console.log('a1')
     // 2. define repository
     const createDocumentRepository = new CreateDocumentRepository(controllerInput.dbConnection, { session })
-    console.log('a2')
     const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
     // 3. handle business rules
     // 3.1 check authenticated user
-    console.log('a3')
     const verifyTokenResponse = await verifyUserToken(controllerInput, { session })
     // 3.2 create
-    console.log(controllerInput.httpRequest)
     const response = await CreateDocumentUseCase.handle(
       {
         auth: verifyTokenResponse as IAuth,
