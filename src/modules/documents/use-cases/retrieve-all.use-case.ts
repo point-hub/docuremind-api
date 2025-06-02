@@ -19,6 +19,7 @@ export interface IOutput {
 export class RetrieveAllDocumentUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. database operation
+    console.log(input.query)
     const response = await deps.retrieveAllDocumentRepository.handle(input.query)
     // 2. output
     return {

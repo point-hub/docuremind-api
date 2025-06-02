@@ -51,12 +51,14 @@ export class RetrieveDocumentUseCase {
     const response = await deps.retrieveDocumentRepository.handle(input._id)
     // 2. output
     const documentFiles = []
-    for (const documentFile of response.document_files) {
-      documentFiles.push({
-        name: documentFile.document,
-        mime: documentFile.document_mime,
-        url: (await getFile(documentFile.document)) as string,
-      })
+    if (response.document_files) {
+      for (const documentFile of response.document_files) {
+        documentFiles.push({
+          name: documentFile.document,
+          mime: documentFile.document_mime,
+          url: (await getFile(documentFile.document)) as string,
+        })
+      }
     }
     return {
       _id: response._id,

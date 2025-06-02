@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
+import QueryString from 'qs'
 
 import cookieConfig from '@/config/cookie'
 import corsConfig from '@/config/cors'
@@ -29,11 +30,13 @@ export const createApp = async (appInput: IBaseAppInput) => {
    */
   app.set('trust proxy', true)
   // Gzip compressing can greatly decrease the size of the response body
+
   app.use(compression())
   // Parse json request body
-  app.use(express.json({ limit: '50mb' }))
+  app.use(express.json())
   // Parse urlencoded request body
-  app.use(express.urlencoded({ extended: true, limit: '50mb' }))
+  app.use(express.urlencoded({ extended: true }))
+  app.set('query parser', (str: string) => QueryString.parse(str, { allowDots: false }))
   // Set security HTTP headers
   app.use(helmet())
   app.use(
