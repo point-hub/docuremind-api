@@ -65,9 +65,18 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
     if (query.filter?.['is_expired'] === 'expired') {
       const today = new Date()
       filtersAnd.push({
-        expired_date: {
-          $lte: today.toISOString(),
-        },
+        $and: [
+          {
+            expired_date: {
+              $ne: '',
+            },
+          },
+          {
+            expired_date: {
+              $lte: today.toISOString(),
+            },
+          },
+        ],
       })
     }
 
