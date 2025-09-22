@@ -60,7 +60,16 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
       const sevenDaysLater = new Date(today)
       sevenDaysLater.setDate(today.getDate() + 7)
 
-      filtersAnd.push({ expired_date: { $lte: `${sevenDaysLater.toISOString()}` } })
+      filtersAnd.push({
+        $and: [
+          {
+            expired_date: {
+              $ne: '',
+            },
+          },
+          { expired_date: { $lte: `${sevenDaysLater.toISOString()}` } },
+        ],
+      })
     }
     if (query.filter?.['is_expired'] === 'expired') {
       const today = new Date()
@@ -86,6 +95,7 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
       today.setHours(0, 0, 0, 0) // Set time to midnight
       const sevenDaysLater = new Date(today)
       sevenDaysLater.setDate(today.getDate() + 7)
+      filtersAnd.push({ expired_date: { $ne: '' } })
       filtersAnd.push({ expired_date: { $exists: true } })
       filtersAnd.push({ expired_date: { $gte: today.toISOString() } })
       filtersAnd.push({ expired_date: { $lte: sevenDaysLater.toISOString() } })
