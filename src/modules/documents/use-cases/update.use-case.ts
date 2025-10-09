@@ -118,21 +118,25 @@ export class UpdateDocumentUseCase {
       }
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const keepFiles = input.data.document_files.map((doc: any) => doc.name)
+    const keepFiles = input.data.document_files?.map((doc: any) => doc.name)
 
     console.log(input.data)
     // 3. database operation
-    const response = await deps.updateDocumentRepository.handle(
-      input._id,
-      documentEntity.data,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      newFiles as any,
-      keepFiles as string[],
-    )
-    // 4. output
-    return {
-      matched_count: response.matched_count,
-      modified_count: response.modified_count,
+    try {
+      const response = await deps.updateDocumentRepository.handle(
+        input._id,
+        documentEntity.data,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        newFiles as any,
+        keepFiles as string[],
+      )
+      // 4. output
+      return {
+        matched_count: response.matched_count,
+        modified_count: response.modified_count,
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 }

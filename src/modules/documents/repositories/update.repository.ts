@@ -27,18 +27,20 @@ export class UpdateDocumentRepository implements IUpdateDocumentRepository {
     files: Record<string, unknown>,
     keep_files: string[],
   ): Promise<IUpdateDocumentOutput> {
-    await this.database.collection(collectionName).update(
-      _id,
-      {
-        $pull: {
-          document_files: {
-            document: { $nin: keep_files },
+    if (keep_files?.length > 0)
+      await this.database.collection(collectionName).update(
+        _id,
+        {
+          $pull: {
+            document_files: {
+              document: { $nin: keep_files },
+            },
           },
         },
-      },
-      { ...this.options, ignoreUndefined: true },
-    )
-    return await this.database.collection(collectionName).update(
+        { ...this.options, ignoreUndefined: true },
+      )
+
+    const response = await this.database.collection(collectionName).update(
       _id,
       {
         $set: document,
@@ -48,5 +50,8 @@ export class UpdateDocumentRepository implements IUpdateDocumentRepository {
       },
       { ...this.options, ignoreUndefined: true },
     )
+
+    console.log(response)
+    return response
   }
 }
