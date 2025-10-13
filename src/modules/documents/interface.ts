@@ -10,6 +10,7 @@ export interface IDocumentEntity {
   name?: string
   type?: string
   issued_date?: string
+  due_date_reminder?: string
   expired_date?: string
   owner?: {
     _id?: string

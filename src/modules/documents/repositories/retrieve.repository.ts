@@ -34,6 +34,7 @@ export interface IRetrieveDocumentOutput {
   created_at: Date
   updated_at: Date
   issued_date: string
+  due_date_reminder: string
   expired_date: string
   // Borrow
   requested_at?: Date
@@ -80,6 +81,7 @@ export class RetrieveDocumentRepository implements IRetrieveDocumentRepository {
       updated_by: response.data[0]['updated_by'] as IAuthLookup,
       updated_at: response.data[0]['updated_at'] as Date,
       issued_date: response.data[0]['issued_date'] as string,
+      due_date_reminder: response.data[0]['due_date_reminder'] as string,
       expired_date: response.data[0]['expired_date'] as string,
       requested_by: response.data[0]['requested_by'] as IAuthLookup,
       requested_at: response.data[0]['requested_at'] as Date,

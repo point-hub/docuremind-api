@@ -28,6 +28,7 @@ export interface IInput {
       label: string
     }
     issued_date: string
+    due_date_reminder: string
     expired_date: string
     notes?: string
   }
@@ -77,6 +78,7 @@ export class CreateDocumentUseCase {
       notes: input.data.notes,
       status: 'available',
       issued_date: input.data.issued_date,
+      due_date_reminder: input.data.due_date_reminder,
       expired_date: input.data.expired_date,
       created_by: {
         _id: input.auth._id,

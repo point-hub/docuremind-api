@@ -33,6 +33,7 @@ export interface IOutput {
   borrows: any
   status: string
   issued_date: string
+  due_date_reminder: string
   expired_date: string
   created_at: Date
   created_by: IAuthLookup
@@ -76,6 +77,7 @@ export class RetrieveDocumentUseCase {
       borrows: response.borrows,
       status: response.status,
       issued_date: response.issued_date,
+      due_date_reminder: response.due_date_reminder,
       expired_date: response.expired_date,
       created_at: response.created_at,
       created_by: response.created_by,

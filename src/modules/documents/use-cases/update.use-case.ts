@@ -32,6 +32,7 @@ export interface IInput {
     }
     notes: string
     issued_date: string
+    due_date_reminder: string
     expired_date: string
     updated_by: {
       _id: string
@@ -85,6 +86,7 @@ export class UpdateDocumentUseCase {
       rack: input.data.rack,
       notes: input.data.notes,
       issued_date: input.data.issued_date,
+      due_date_reminder: input.data.due_date_reminder,
       expired_date: input.data.expired_date,
       updated_by: {
         _id: input.auth._id,
