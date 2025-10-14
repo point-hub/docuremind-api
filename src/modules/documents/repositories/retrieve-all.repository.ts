@@ -61,13 +61,11 @@ export class RetrieveAllDocumentRepository implements IRetrieveAllDocumentReposi
       sevenDaysLater.setDate(today.getDate() + 7)
 
       filtersAnd.push({
-        $and: [
+        $or: [
           {
-            expired_date: {
-              $ne: '',
-            },
+            $and: [{ expired_date: { $ne: '' } }, { expired_date: { $lte: sevenDaysLater.toISOString() } }],
           },
-          { expired_date: { $lte: `${sevenDaysLater.toISOString()}` } },
+          { due_date_reminder: new Date().toISOString().split('T')[0] },
         ],
       })
     }
