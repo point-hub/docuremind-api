@@ -1,0 +1,5 @@
+export { CreateActivityRepository } from './create.repository'
+export { DeleteActivityRepository } from './delete.repository'
+export { RetrieveActivityRepository } from './retrieve.repository'
+export { RetrieveAllActivityRepository } from './retrieve-all.repository'
+export { UpdateActivityRepository } from './update.repository'

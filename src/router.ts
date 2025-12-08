@@ -1,6 +1,7 @@
 import express, { type Express, type Request, type Response } from 'express'
 
 import type { IBaseAppInput } from './app'
+import userActivityRouter from './modules/activities/router'
 import documentRouter from './modules/documents/router'
 import ownerRouter from './modules/owners/router'
 import userRouter from './modules/users/router'
@@ -16,6 +17,7 @@ export default async function (baseRouterInput: IBaseAppInput) {
    * <modules>/router.ts
    */
   app.use('/v1/users', await userRouter(baseRouterInput))
+  app.use('/v1/user-activities', await userActivityRouter(baseRouterInput))
   app.use('/v1/auth', await authRouter(baseRouterInput))
   app.use('/v1/owners', await ownerRouter(baseRouterInput))
   app.use('/v1/vaults', await vaultRouter(baseRouterInput))

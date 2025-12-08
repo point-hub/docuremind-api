@@ -1,0 +1,5 @@
+export { createActivityController } from './create.controller'
+export { deleteActivityController } from './delete.controller'
+export { retrieveActivityController } from './retrieve.controller'
+export { retrieveAllActivityController } from './retrieve-all.controller'
+export { updateActivityController } from './update.controller'

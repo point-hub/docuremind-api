@@ -1,12 +1,10 @@
 import type { ISchemaValidation } from '@point-hub/papi'
 
-import type { ICreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import { type IAuth } from '@/modules/users/interface'
 import type { UniqueValidation } from '@/utils/unique-validation'
 
-import { OwnerEntity } from '../entity'
-import type { IRetrieveOwnerRepository } from '../repositories/retrieve.repository'
-import type { IUpdateOwnerRepository } from '../repositories/update.repository'
+import { ActivityEntity } from '../entity'
+import type { IUpdateActivityRepository } from '../repositories/update.repository'
 import { updateValidation } from '../validations/update.validation'
 
 export interface IInput {
@@ -24,9 +22,7 @@ export interface IInput {
 
 export interface IDeps {
   schemaValidation: ISchemaValidation
-  updateOwnerRepository: IUpdateOwnerRepository
-  retrieveOwnerRepository: IRetrieveOwnerRepository
-  createActivityRepository: ICreateActivityRepository
+  updateActivityRepository: IUpdateActivityRepository
   uniqueValidation: UniqueValidation
 }
 
@@ -35,13 +31,13 @@ export interface IOutput {
   modified_count: number
 }
 
-export class UpdateOwnerUseCase {
+export class UpdateActivityUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. validate schema
-    await deps.uniqueValidation.handle('owners', { name: { $regex: input.data.name, $options: 'i' } }, input._id)
+    await deps.uniqueValidation.handle('activities', { name: { $regex: input.data.name, $options: 'i' } }, input._id)
     await deps.schemaValidation(input.data, updateValidation)
     // 2. define entity
-    const ownerEntity = new OwnerEntity({
+    const activityEntity = new ActivityEntity({
       name: input.data.name,
       updated_by: {
         _id: input.auth._id,
@@ -51,17 +47,7 @@ export class UpdateOwnerUseCase {
       updated_at: new Date(),
     })
     // 3. database operation
-    const owner = await deps.retrieveOwnerRepository.handle(input._id)
-    await deps.createActivityRepository.handle({
-      notes: `updated owner "${owner.name}" to "${input.data.name}"`,
-      user: {
-        _id: input.auth._id,
-        label: input.auth.name,
-        email: input.auth.email,
-      },
-      date: new Date(),
-    })
-    const response = await deps.updateOwnerRepository.handle(input._id, ownerEntity.data)
+    const response = await deps.updateActivityRepository.handle(input._id, activityEntity.data)
     // 4. output
     return {
       matched_count: response.matched_count,

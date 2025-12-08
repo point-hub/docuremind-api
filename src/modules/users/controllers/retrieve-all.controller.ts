@@ -4,6 +4,7 @@ import { RetrieveAllUserRepository } from '../repositories/retrieve-all.reposito
 import { RetrieveAllUserUseCase } from '../use-cases/retrieve-all.use-case'
 
 export const retrieveAllUserController: IController = async (controllerInput: IControllerInput) => {
+  console.log(controllerInput.httpRequest['query'])
   let session
   try {
     // 1. start session for transactional

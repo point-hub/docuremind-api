@@ -1,10 +1,13 @@
 import type { IController, IControllerInput } from '@point-hub/papi'
 
+import { CreateActivityRepository } from '@/modules/activities/repositories/create.repository'
+import type { IAuth } from '@/modules/users/interface'
 import { verifyUserToken } from '@/modules/users/utils/verify-user-token'
 import { throwApiError } from '@/utils/throw-api-error'
 import { schemaValidation } from '@/utils/validation'
 
 import { DeleteOwnerRepository } from '../repositories/delete.repository'
+import { RetrieveOwnerRepository } from '../repositories/retrieve.repository'
 import { DeleteOwnerUseCase } from '../use-cases/delete.use-case'
 
 export const deleteOwnerController: IController = async (controllerInput: IControllerInput) => {
@@ -15,13 +18,16 @@ export const deleteOwnerController: IController = async (controllerInput: IContr
     session.startTransaction()
     // 2. define repository
     const deleteOwnerRepository = new DeleteOwnerRepository(controllerInput.dbConnection, { session })
+    const retrieveOwnerRepository = new RetrieveOwnerRepository(controllerInput.dbConnection, { session })
+    const createActivityRepository = new CreateActivityRepository(controllerInput.dbConnection, { session })
     // 3. handle business logic
     // 3.1 check authenticated user
     await verifyUserToken(controllerInput, { session })
+    const verifyTokenResponse = await verifyUserToken(controllerInput, { session })
     // 3.2 delete
     const response = await DeleteOwnerUseCase.handle(
-      { _id: controllerInput.httpRequest['params'].id },
-      { schemaValidation, deleteOwnerRepository, throwApiError },
+      { _id: controllerInput.httpRequest['params'].id, auth: verifyTokenResponse as IAuth },
+      { schemaValidation, createActivityRepository, retrieveOwnerRepository, deleteOwnerRepository, throwApiError },
     )
     await session.commitTransaction()
     // 4. return response to client

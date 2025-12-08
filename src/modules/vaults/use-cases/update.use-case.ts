@@ -1,9 +1,11 @@
 import type { ISchemaValidation } from '@point-hub/papi'
 
+import type { ICreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import { type IAuth } from '@/modules/users/interface'
 import type { UniqueValidation } from '@/utils/unique-validation'
 
 import { VaultEntity } from '../entity'
+import type { IRetrieveVaultRepository } from '../repositories/retrieve.repository'
 import type { IUpdateVaultRepository } from '../repositories/update.repository'
 import { updateValidation } from '../validations/update.validation'
 
@@ -26,6 +28,8 @@ export interface IDeps {
   schemaValidation: ISchemaValidation
   updateVaultRepository: IUpdateVaultRepository
   uniqueValidation: UniqueValidation
+  retrieveVaultRepository: IRetrieveVaultRepository
+  createActivityRepository: ICreateActivityRepository
 }
 
 export interface IOutput {
@@ -52,6 +56,16 @@ export class UpdateVaultUseCase {
       updated_at: new Date(),
     })
     // 3. database operation
+    const vault = await deps.retrieveVaultRepository.handle(input._id)
+    await deps.createActivityRepository.handle({
+      notes: `updated vault "${vault.name}" to "${input.data.name}"`,
+      user: {
+        _id: input.auth._id,
+        label: input.auth.name,
+        email: input.auth.email,
+      },
+      date: new Date(),
+    })
     const response = await deps.updateVaultRepository.handle(input._id, vaultEntity.data)
     // 4. output
     return {

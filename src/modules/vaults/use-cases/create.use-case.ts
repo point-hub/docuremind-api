@@ -1,6 +1,7 @@
 import type { IObjClean } from '@point-hub/express-utils'
 import type { ISchemaValidation } from '@point-hub/papi'
 
+import type { ICreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import type { IAuth } from '@/modules/users/interface'
 import type { IUniqueValidation } from '@/utils/unique-validation'
 
@@ -25,6 +26,7 @@ export interface IDeps {
   uniqueValidation: IUniqueValidation
   createVaultRepository: ICreateVaultRepository
   schemaValidation: ISchemaValidation
+  createActivityRepository: ICreateActivityRepository
 }
 
 export interface IOutput {
@@ -51,6 +53,15 @@ export class CreateVaultUseCase {
     })
     vaultEntity.data = deps.objClean(vaultEntity.data)
     // 3. database operation
+    await deps.createActivityRepository.handle({
+      notes: `created vault "${input.data.name}"`,
+      user: {
+        _id: input.auth._id,
+        label: input.auth.name,
+        email: input.auth.email,
+      },
+      date: new Date(),
+    })
     const response = await deps.createVaultRepository.handle(vaultEntity.data)
     // 4. output
     return { inserted_id: response.inserted_id }
