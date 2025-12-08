@@ -2,6 +2,7 @@ import type { ISchemaValidation } from '@point-hub/papi'
 
 import type { ICreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 
+import type { IAuth } from '../interface'
 import type { IDeleteUserRepository } from '../repositories/delete.repository'
 import type { IRetrieveUserRepository } from '../repositories/retrieve.repository'
 import { deleteValidation } from '../validations/delete.validation'
