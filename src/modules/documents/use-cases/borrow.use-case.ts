@@ -1,10 +1,12 @@
 import { tokenGenerate } from '@point-hub/express-utils'
 import type { ISchemaValidation } from '@point-hub/papi'
 
+import type { ICreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import { type IAuth } from '@/modules/users/interface'
 import type { UniqueValidation } from '@/utils/unique-validation'
 
 import type { IBorrowDocumentRepository } from '../repositories/borrow.repository'
+import type { IRetrieveDocumentRepository } from '../repositories/retrieve.repository'
 import { borrowValidation } from '../validations/borrow.validation'
 
 export interface IInput {
@@ -25,6 +27,8 @@ export interface IInput {
 export interface IDeps {
   schemaValidation: ISchemaValidation
   borrowDocumentRepository: IBorrowDocumentRepository
+  retrieveDocumentRepository: IRetrieveDocumentRepository
+  createActivityRepository: ICreateActivityRepository
   uniqueValidation: UniqueValidation
 }
 
@@ -55,6 +59,16 @@ export class BorrowDocumentUseCase {
     }
 
     // 3. database operation
+    const document = await deps.retrieveDocumentRepository.handle(input._id)
+    await deps.createActivityRepository.handle({
+      notes: `request borrow document "${document.name}"`,
+      user: {
+        _id: input.auth._id,
+        label: input.auth.name,
+        email: input.auth.email,
+      },
+      date: new Date(),
+    })
     const response = await deps.borrowDocumentRepository.handle(input._id, documentEntity)
     // 4. output
     return {

@@ -1,11 +1,13 @@
 import { tokenGenerate } from '@point-hub/express-utils'
 import type { ISchemaValidation } from '@point-hub/papi'
 
+import type { ICreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import { type IAuth } from '@/modules/users/interface'
 import type { UniqueValidation } from '@/utils/unique-validation'
 import { uploadFile } from '@/utils/upload'
 
 import { DocumentEntity } from '../entity'
+import type { IRetrieveDocumentRepository } from '../repositories/retrieve.repository'
 import type { IUpdateDocumentRepository } from '../repositories/update.repository'
 import { updateValidation } from '../validations/update.validation'
 
@@ -53,6 +55,8 @@ export interface IDeps {
   schemaValidation: ISchemaValidation
   updateDocumentRepository: IUpdateDocumentRepository
   uniqueValidation: UniqueValidation
+  retrieveDocumentRepository: IRetrieveDocumentRepository
+  createActivityRepository: ICreateActivityRepository
 }
 
 export interface IOutput {
@@ -125,6 +129,16 @@ export class UpdateDocumentUseCase {
     console.log(input.data)
     // 3. database operation
     try {
+      const document = await deps.retrieveDocumentRepository.handle(input._id)
+      await deps.createActivityRepository.handle({
+        notes: `change document name from "${document.name}" to "${input.data.name}"`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
       const response = await deps.updateDocumentRepository.handle(
         input._id,
         documentEntity.data,

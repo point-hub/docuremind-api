@@ -1,6 +1,7 @@
 import { type IObjClean, tokenGenerate } from '@point-hub/express-utils'
 import type { ISchemaValidation } from '@point-hub/papi'
 
+import type { ICreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import type { IAuth } from '@/modules/users/interface'
 import type { IUniqueValidation } from '@/utils/unique-validation'
 import { uploadFile } from '@/utils/upload'
@@ -45,6 +46,7 @@ export interface IDeps {
   objClean: IObjClean
   uniqueValidation: IUniqueValidation
   createDocumentRepository: ICreateDocumentRepository
+  createActivityRepository: ICreateActivityRepository
   schemaValidation: ISchemaValidation
 }
 
@@ -113,6 +115,15 @@ export class CreateDocumentUseCase {
     documentEntity.data = deps.objClean(documentEntity.data)
     console.log('h')
     // 3. database operation
+    await deps.createActivityRepository.handle({
+      notes: `created document "${input.data.name}"`,
+      user: {
+        _id: input.auth._id,
+        label: input.auth.name,
+        email: input.auth.email,
+      },
+      date: new Date(),
+    })
     const response = await deps.createDocumentRepository.handle(documentEntity.data)
     console.log('i')
     // 4. output

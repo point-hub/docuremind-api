@@ -1,5 +1,6 @@
 import type { IController, IControllerInput } from '@point-hub/papi'
 
+import { CreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import type { IAuth } from '@/modules/users/interface'
 import { verifyUserToken } from '@/modules/users/utils/verify-user-token'
 import { UniqueValidation } from '@/utils/unique-validation'
@@ -21,6 +22,7 @@ export const returnApproveDocumentController: IController = async (controllerInp
       session,
     })
     const retrieveDocumentRepository = new RetrieveDocumentRepository(controllerInput.dbConnection, { session })
+    const createActivityRepository = new CreateActivityRepository(controllerInput.dbConnection, { session })
     // 3. handle business rules
     // 3.1 check authenticated user
     const verifyTokenResponse = await verifyUserToken(controllerInput, { session })
@@ -31,7 +33,13 @@ export const returnApproveDocumentController: IController = async (controllerInp
         _id: controllerInput.httpRequest['params'].id,
         return_id: controllerInput.httpRequest['params'].returnId,
       },
-      { schemaValidation, retrieveDocumentRepository, returnApproveDocumentRepository, uniqueValidation },
+      {
+        schemaValidation,
+        retrieveDocumentRepository,
+        createActivityRepository,
+        returnApproveDocumentRepository,
+        uniqueValidation,
+      },
     )
     await session.commitTransaction()
     // 4. return response to client

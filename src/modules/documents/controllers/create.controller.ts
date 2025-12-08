@@ -1,6 +1,7 @@
 import { objClean } from '@point-hub/express-utils'
 import type { IController, IControllerInput } from '@point-hub/papi'
 
+import { CreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import type { IAuth } from '@/modules/users/interface'
 import { verifyUserToken } from '@/modules/users/utils/verify-user-token'
 import { UniqueValidation } from '@/utils/unique-validation'
@@ -18,6 +19,7 @@ export const createDocumentController: IController = async (controllerInput: ICo
     // 2. define repository
     const createDocumentRepository = new CreateDocumentRepository(controllerInput.dbConnection, { session })
     const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
+    const createActivityRepository = new CreateActivityRepository(controllerInput.dbConnection, { session })
     // 3. handle business rules
     // 3.1 check authenticated user
     const verifyTokenResponse = await verifyUserToken(controllerInput, { session })
@@ -32,6 +34,7 @@ export const createDocumentController: IController = async (controllerInput: ICo
         objClean,
         uniqueValidation,
         createDocumentRepository,
+        createActivityRepository,
         schemaValidation,
       },
     )

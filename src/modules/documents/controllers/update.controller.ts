@@ -1,10 +1,12 @@
 import type { IController, IControllerInput } from '@point-hub/papi'
 
+import { CreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import type { IAuth } from '@/modules/users/interface'
 import { verifyUserToken } from '@/modules/users/utils/verify-user-token'
 import { UniqueValidation } from '@/utils/unique-validation'
 import { schemaValidation } from '@/utils/validation'
 
+import { RetrieveDocumentRepository } from '../repositories/retrieve.repository'
 import { UpdateDocumentRepository } from '../repositories/update.repository'
 import { UpdateDocumentUseCase } from '../use-cases/update.use-case'
 
@@ -17,6 +19,8 @@ export const updateDocumentController: IController = async (controllerInput: ICo
     // 2. define repository
     const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
     const updateDocumentRepository = new UpdateDocumentRepository(controllerInput.dbConnection, { session })
+    const retrieveDocumentRepository = new RetrieveDocumentRepository(controllerInput.dbConnection, { session })
+    const createActivityRepository = new CreateActivityRepository(controllerInput.dbConnection, { session })
     // 3. handle business rules
     // 3.1 check authenticated user
     const verifyTokenResponse = await verifyUserToken(controllerInput, { session })
@@ -28,7 +32,13 @@ export const updateDocumentController: IController = async (controllerInput: ICo
         data: controllerInput.httpRequest['body'],
         files: controllerInput.httpRequest['files'],
       },
-      { schemaValidation, updateDocumentRepository, uniqueValidation },
+      {
+        schemaValidation,
+        createActivityRepository,
+        retrieveDocumentRepository,
+        updateDocumentRepository,
+        uniqueValidation,
+      },
     )
     await session.commitTransaction()
     // 4. return response to client

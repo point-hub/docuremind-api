@@ -1,5 +1,6 @@
 import type { ISchemaValidation } from '@point-hub/papi'
 
+import type { ICreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import { type IAuth } from '@/modules/users/interface'
 import { throwApiError } from '@/utils/throw-api-error'
 import type { UniqueValidation } from '@/utils/unique-validation'
@@ -17,6 +18,7 @@ export interface IDeps {
   schemaValidation: ISchemaValidation
   borrowApproveDocumentRepository: IBorrowApproveDocumentRepository
   retrieveDocumentRepository: IRetrieveDocumentRepository
+  createActivityRepository: ICreateActivityRepository
   uniqueValidation: UniqueValidation
 }
 
@@ -34,6 +36,16 @@ export class BorrowApproveDocumentUseCase {
         message: "Cannot approve this data because it isn't available",
       })
     }
+    const document = await deps.retrieveDocumentRepository.handle(input._id)
+    await deps.createActivityRepository.handle({
+      notes: `approve request borrow for "${document.name}"`,
+      user: {
+        _id: input.auth._id,
+        label: input.auth.name,
+        email: input.auth.email,
+      },
+      date: new Date(),
+    })
     const response = await deps.borrowApproveDocumentRepository.handle(input.borrow_id)
     // 2. output
     return {

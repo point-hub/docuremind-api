@@ -1,11 +1,13 @@
 import type { IController, IControllerInput } from '@point-hub/papi'
 
+import { CreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import type { IAuth } from '@/modules/users/interface'
 import { verifyUserToken } from '@/modules/users/utils/verify-user-token'
 import { UniqueValidation } from '@/utils/unique-validation'
 import { schemaValidation } from '@/utils/validation'
 
 import { BorrowDocumentRepository } from '../repositories/borrow.repository'
+import { RetrieveDocumentRepository } from '../repositories/retrieve.repository'
 import { BorrowDocumentUseCase } from '../use-cases/borrow.use-case'
 
 export const borrowDocumentController: IController = async (controllerInput: IControllerInput) => {
@@ -17,6 +19,8 @@ export const borrowDocumentController: IController = async (controllerInput: ICo
     // 2. define repository
     const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
     const borrowDocumentRepository = new BorrowDocumentRepository(controllerInput.dbConnection, { session })
+    const retrieveDocumentRepository = new RetrieveDocumentRepository(controllerInput.dbConnection, { session })
+    const createActivityRepository = new CreateActivityRepository(controllerInput.dbConnection, { session })
     // 3. handle business rules
     // 3.1 check authenticated user
     const verifyTokenResponse = await verifyUserToken(controllerInput, { session })
@@ -27,7 +31,13 @@ export const borrowDocumentController: IController = async (controllerInput: ICo
         _id: controllerInput.httpRequest['params'].id,
         data: controllerInput.httpRequest['body'],
       },
-      { schemaValidation, borrowDocumentRepository, uniqueValidation },
+      {
+        schemaValidation,
+        retrieveDocumentRepository,
+        createActivityRepository,
+        borrowDocumentRepository,
+        uniqueValidation,
+      },
     )
     await session.commitTransaction()
     // 4. return response to client
