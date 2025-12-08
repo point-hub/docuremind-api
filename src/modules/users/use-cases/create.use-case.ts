@@ -1,14 +1,17 @@
 import type { IObjClean } from '@point-hub/express-utils'
 import type { ISchemaValidation } from '@point-hub/papi'
 
+import type { ICreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import { type IRenderHbsTemplate, type ISendMail } from '@/utils/email'
 import type { IUniqueValidation } from '@/utils/unique-validation'
 
 import { collectionName, UserEntity } from '../entity'
+import type { IAuth } from '../interface'
 import type { ICreateUserRepository } from '../repositories/create.repository'
 import { createValidation } from '../validations/create.validation'
 
 export interface IInput {
+  auth: IAuth
   name?: string
   username?: string
   email?: string
@@ -26,6 +29,7 @@ export interface IDeps {
   renderHbsTemplate: IRenderHbsTemplate
   generateVerificationLink(): string
   generateVerificationCode(): string
+  createActivityRepository: ICreateActivityRepository
 }
 
 export interface IOutput {
@@ -53,6 +57,15 @@ export class CreateUserUseCase {
     userEntity.trimmedEmail()
     userEntity.trimmedUsername()
     // 4. database operation
+    await deps.createActivityRepository.handle({
+      notes: `invited "${input.name}" with role "${input.role}"`,
+      user: {
+        _id: input.auth._id,
+        label: input.auth.name,
+        email: input.auth.email,
+      },
+      date: new Date(),
+    })
     const response = await deps.createUserRepository.handle(userEntity.data)
     // 5. send welcome email
     const compiledTemplate = await deps.renderHbsTemplate('modules/users/emails/email-verification.hbs', {

@@ -1,11 +1,15 @@
 import { objClean } from '@point-hub/express-utils'
 import type { IController, IControllerInput } from '@point-hub/papi'
 
+import { CreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import { UniqueValidation } from '@/utils/unique-validation'
 import { schemaValidation } from '@/utils/validation'
 
+import type { IAuth } from '../interface'
+import { RetrieveUserRepository } from '../repositories/retrieve.repository'
 import { UpdateUserRepository } from '../repositories/update.repository'
 import { UpdateUserUseCase } from '../use-cases/update.use-case'
+import { verifyUserToken } from '../utils/verify-user-token'
 
 export const updateUserController: IController = async (controllerInput: IControllerInput) => {
   let session
@@ -16,13 +20,24 @@ export const updateUserController: IController = async (controllerInput: IContro
     // 2. define repository
     const updateUserRepository = new UpdateUserRepository(controllerInput.dbConnection, { session })
     const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
+    const retrieveUserRepository = new RetrieveUserRepository(controllerInput.dbConnection, { session })
+    const createActivityRepository = new CreateActivityRepository(controllerInput.dbConnection, { session })
+    const verifyTokenResponse = await verifyUserToken(controllerInput, { session })
     // 3. handle business rules
     const response = await UpdateUserUseCase.handle(
       {
         _id: controllerInput.httpRequest['params'].id,
         data: controllerInput.httpRequest['body'],
+        auth: verifyTokenResponse as IAuth,
       },
-      { schemaValidation, updateUserRepository, uniqueValidation, objClean },
+      {
+        schemaValidation,
+        retrieveUserRepository,
+        createActivityRepository,
+        updateUserRepository,
+        uniqueValidation,
+        objClean,
+      },
     )
     await session.commitTransaction()
     // 4. return response to client

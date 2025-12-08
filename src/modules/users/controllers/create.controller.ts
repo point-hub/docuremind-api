@@ -1,13 +1,16 @@
 import { objClean, tokenGenerate } from '@point-hub/express-utils'
 import type { IController, IControllerInput } from '@point-hub/papi'
 
+import { CreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import { renderHbsTemplate, sendMail } from '@/utils/email'
 import { UniqueValidation } from '@/utils/unique-validation'
 import { schemaValidation } from '@/utils/validation'
 
+import type { IAuth } from '../interface'
 import { CreateUserRepository } from '../repositories/create.repository'
 import { CreateUserUseCase } from '../use-cases/create.use-case'
 import { generateVerificationLink } from '../utils/generate-verification-link'
+import { verifyUserToken } from '../utils/verify-user-token'
 
 export const createUserController: IController = async (controllerInput: IControllerInput) => {
   let session
@@ -18,18 +21,24 @@ export const createUserController: IController = async (controllerInput: IContro
     // 2. define repository
     const createUserRepository = new CreateUserRepository(controllerInput.dbConnection, { session })
     const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
+    const createActivityRepository = new CreateActivityRepository(controllerInput.dbConnection, { session })
     // 3. handle business rules
-    const response = await CreateUserUseCase.handle(controllerInput.httpRequest['body'], {
-      createUserRepository,
-      hashPassword: Bun.password.hash,
-      schemaValidation,
-      uniqueValidation,
-      objClean,
-      renderHbsTemplate: renderHbsTemplate,
-      sendEmail: sendMail,
-      generateVerificationCode: tokenGenerate,
-      generateVerificationLink: generateVerificationLink,
-    })
+    const verifyTokenResponse = await verifyUserToken(controllerInput, { session })
+    const response = await CreateUserUseCase.handle(
+      { ...controllerInput.httpRequest['body'], auth: verifyTokenResponse as IAuth },
+      {
+        createUserRepository,
+        hashPassword: Bun.password.hash,
+        schemaValidation,
+        uniqueValidation,
+        objClean,
+        renderHbsTemplate: renderHbsTemplate,
+        sendEmail: sendMail,
+        generateVerificationCode: tokenGenerate,
+        generateVerificationLink: generateVerificationLink,
+        createActivityRepository,
+      },
+    )
     await session.commitTransaction()
     // 4. return response to client
     return {

@@ -65,7 +65,7 @@ export interface IOutput {
 }
 
 export class UpdateDocumentUseCase {
-  static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
+  static async handle(input: IInput, deps: IDeps): Promise<IOutput | undefined> {
     // https://stackoverflow.com/questions/56298481/how-to-fix-object-null-prototype-title-product
     input.data = JSON.parse(JSON.stringify(input.data))
     console.log(input.files)

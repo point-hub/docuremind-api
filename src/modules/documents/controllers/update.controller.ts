@@ -45,8 +45,8 @@ export const updateDocumentController: IController = async (controllerInput: ICo
     return {
       status: 200,
       json: {
-        matched_count: response.matched_count,
-        modified_count: response.modified_count,
+        matched_count: response?.matched_count,
+        modified_count: response?.modified_count,
       },
     }
   } catch (error) {

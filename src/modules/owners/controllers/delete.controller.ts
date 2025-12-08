@@ -22,7 +22,6 @@ export const deleteOwnerController: IController = async (controllerInput: IContr
     const createActivityRepository = new CreateActivityRepository(controllerInput.dbConnection, { session })
     // 3. handle business logic
     // 3.1 check authenticated user
-    await verifyUserToken(controllerInput, { session })
     const verifyTokenResponse = await verifyUserToken(controllerInput, { session })
     // 3.2 delete
     const response = await DeleteOwnerUseCase.handle(
