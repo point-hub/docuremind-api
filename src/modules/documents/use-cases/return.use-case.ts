@@ -10,6 +10,7 @@ import type { IReturnDocumentRepository } from '../repositories/return.repositor
 export interface IInput {
   auth: IAuth
   _id: string
+  document_id: string
 }
 
 export interface IDeps {
@@ -31,7 +32,8 @@ export class ReturnDocumentUseCase {
     // await deps.schemaValidation(input.data, returnValidation)
     // 2. define entity
     // 3. database operation
-    const document = await deps.retrieveDocumentRepository.handle(input._id)
+    console.log(input)
+    const document = await deps.retrieveDocumentRepository.handle(input.document_id)
     await deps.createActivityRepository.handle({
       notes: `request return for "${document.name}"`,
       user: {

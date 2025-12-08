@@ -29,6 +29,7 @@ export const returnDocumentController: IController = async (controllerInput: ICo
       {
         auth: verifyTokenResponse as IAuth,
         _id: controllerInput.httpRequest['params'].id,
+        document_id: controllerInput.httpRequest['body'].document_id,
       },
       {
         schemaValidation,
