@@ -58,7 +58,7 @@ export class CreateUserUseCase {
     userEntity.trimmedUsername()
     // 4. database operation
     await deps.createActivityRepository.handle({
-      notes: `invited "${input.name}" with role "${input.role}"`,
+      notes: `invited user ${input.username}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

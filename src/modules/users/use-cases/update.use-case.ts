@@ -54,7 +54,7 @@ export class UpdateUserUseCase {
     // 4. database operation
     const user = await deps.retrieveUserRepository.handle(input._id)
     await deps.createActivityRepository.handle({
-      notes: `updated "${user.name}" role from "${user.role}" to "${input.data.role}"`,
+      notes: `updated user ${user.username}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

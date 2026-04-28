@@ -38,7 +38,7 @@ export class BorrowApproveDocumentUseCase {
     }
     const document = await deps.retrieveDocumentRepository.handle(input._id)
     await deps.createActivityRepository.handle({
-      notes: `approve request borrow for "${document.name}"`,
+      notes: `approved the borrow request for document ${document.code}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

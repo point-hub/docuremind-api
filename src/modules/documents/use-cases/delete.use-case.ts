@@ -34,7 +34,7 @@ export class DeleteDocumentUseCase {
     // 3. database operation
     const document = await deps.retrieveDocumentRepository.handle(input._id)
     await deps.createActivityRepository.handle({
-      notes: `delete document "${document.name}"`,
+      notes: `deleted document ${document.code}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

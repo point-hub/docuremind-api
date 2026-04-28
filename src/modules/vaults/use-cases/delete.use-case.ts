@@ -39,7 +39,7 @@ export class DeleteVaultUseCase {
     // 3. database operation
     const vault = await deps.retrieveVaultRepository.handle(input._id)
     await deps.createActivityRepository.handle({
-      notes: `deleted vault "${vault.name}"`,
+      notes: `deleted vault ${vault.code}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

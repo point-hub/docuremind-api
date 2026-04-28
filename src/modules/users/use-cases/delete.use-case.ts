@@ -30,7 +30,7 @@ export class DeleteUserUseCase {
     // 2. database operation
     const user = await deps.retrieveUserRepository.handle(input._id)
     await deps.createActivityRepository.handle({
-      notes: `delete "${user.name}"`,
+      notes: `deleted user ${user.username}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

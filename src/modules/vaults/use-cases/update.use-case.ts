@@ -58,7 +58,7 @@ export class UpdateVaultUseCase {
     // 3. database operation
     const vault = await deps.retrieveVaultRepository.handle(input._id)
     await deps.createActivityRepository.handle({
-      notes: `update vault "${vault.name}" to "${input.data.name}"`,
+      notes: `updated vault ${input.data.code ?? vault.code}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

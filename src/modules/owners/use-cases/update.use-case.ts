@@ -53,7 +53,7 @@ export class UpdateOwnerUseCase {
     // 3. database operation
     const owner = await deps.retrieveOwnerRepository.handle(input._id)
     await deps.createActivityRepository.handle({
-      notes: `updated owner "${owner.name}" to "${input.data.name}"`,
+      notes: `updated owner ${owner.name}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

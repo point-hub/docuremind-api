@@ -61,7 +61,7 @@ export class BorrowDocumentUseCase {
     // 3. database operation
     const document = await deps.retrieveDocumentRepository.handle(input._id)
     await deps.createActivityRepository.handle({
-      notes: `request borrow document "${document.name}"`,
+      notes: `requested to borrow document ${document.code}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

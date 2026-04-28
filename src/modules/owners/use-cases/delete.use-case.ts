@@ -39,7 +39,7 @@ export class DeleteOwnerUseCase {
     // 3. database operation
     const owner = await deps.retrieveOwnerRepository.handle(input._id)
     await deps.createActivityRepository.handle({
-      notes: `deleted owner "${owner.name}"`,
+      notes: `deleted owner ${owner.name}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

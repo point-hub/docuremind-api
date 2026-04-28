@@ -35,7 +35,7 @@ export class ReturnDocumentUseCase {
     console.log(input)
     const document = await deps.retrieveDocumentRepository.handle(input.document_id)
     await deps.createActivityRepository.handle({
-      notes: `request return for "${document.name}"`,
+      notes: `returned document ${document.code}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

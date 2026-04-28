@@ -54,7 +54,7 @@ export class CreateVaultUseCase {
     vaultEntity.data = deps.objClean(vaultEntity.data)
     // 3. database operation
     await deps.createActivityRepository.handle({
-      notes: `create vault "${input.data.name}"`,
+      notes: `created vault ${input.data.code}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

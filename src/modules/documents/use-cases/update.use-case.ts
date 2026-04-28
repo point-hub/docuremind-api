@@ -131,7 +131,7 @@ export class UpdateDocumentUseCase {
     try {
       const document = await deps.retrieveDocumentRepository.handle(input._id)
       await deps.createActivityRepository.handle({
-        notes: `change document name from "${document.name}" to "${input.data.name}"`,
+        notes: `updated document ${input.data.code}`,
         user: {
           _id: input.auth._id,
           label: input.auth.name,
