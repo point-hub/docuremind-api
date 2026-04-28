@@ -7,6 +7,9 @@ import ownerRouter from './modules/owners/router'
 import userRouter from './modules/users/router'
 import authRouter from './modules/users/router-auth'
 import vaultRouter from './modules/vaults/router'
+import borrowRequestRouter from './modules/borrow-requests/router'
+import reminderRouter from './modules/reminders/router'
+
 import { renderHbsTemplate } from './utils/email'
 
 export default async function (baseRouterInput: IBaseAppInput) {
@@ -22,6 +25,9 @@ export default async function (baseRouterInput: IBaseAppInput) {
   app.use('/v1/owners', await ownerRouter(baseRouterInput))
   app.use('/v1/vaults', await vaultRouter(baseRouterInput))
   app.use('/v1/documents', await documentRouter(baseRouterInput))
+  app.use('/v1/borrow-requests', await borrowRequestRouter(baseRouterInput))
+  app.use('/v1/reminders', await reminderRouter(baseRouterInput))
+
 
   /**
    * Rendered email templates
