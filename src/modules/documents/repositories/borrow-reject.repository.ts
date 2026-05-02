@@ -19,6 +19,10 @@ export class BorrowRejectDocumentRepository implements IBorrowRejectDocumentRepo
   async handle(_id: string): Promise<IBorrowRejectDocumentOutput> {
     return await this.database
       .collection(collectionName)
-      .updateMany({ 'borrows._id': _id }, { $set: { 'borrows.$.status': 'rejected' } }, { ...this.options })
+      .updateMany(
+        { 'borrows._id': _id, 'borrows.status': { $ne: 'rejected' } },
+        { $set: { 'borrows.$.status': 'rejected' } },
+        { ...this.options },
+      )
   }
 }

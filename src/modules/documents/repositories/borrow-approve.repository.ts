@@ -20,7 +20,7 @@ export class BorrowApproveDocumentRepository implements IBorrowApproveDocumentRe
     return await this.database
       .collection(collectionName)
       .updateMany(
-        { 'borrows._id': _id },
+        { 'borrows._id': _id, 'borrows.status': { $ne: 'approved' } },
         { $set: { 'borrows.$.status': 'approved', status: 'borrowed' } },
         { ...this.options },
       )

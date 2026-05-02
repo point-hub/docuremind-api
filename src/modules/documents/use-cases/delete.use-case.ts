@@ -33,16 +33,18 @@ export class DeleteDocumentUseCase {
 
     // 3. database operation
     const document = await deps.retrieveDocumentRepository.handle(input._id)
-    await deps.createActivityRepository.handle({
-      notes: `deleted document ${document.code}`,
-      user: {
-        _id: input.auth._id,
-        label: input.auth.name,
-        email: input.auth.email,
-      },
-      date: new Date(),
-    })
     const response = await deps.deleteDocumentRepository.handle(input._id)
+    if (response.deleted_count > 0) {
+      await deps.createActivityRepository.handle({
+        notes: `deleted document ${document.code}`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
+    }
     // 4. output
     return { deleted_count: response.deleted_count }
   }

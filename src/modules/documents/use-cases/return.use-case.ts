@@ -32,18 +32,19 @@ export class ReturnDocumentUseCase {
     // await deps.schemaValidation(input.data, returnValidation)
     // 2. define entity
     // 3. database operation
-    console.log(input)
-    const document = await deps.retrieveDocumentRepository.handle(input.document_id)
-    await deps.createActivityRepository.handle({
-      notes: `returned document ${document.code}`,
-      user: {
-        _id: input.auth._id,
-        label: input.auth.name,
-        email: input.auth.email,
-      },
-      date: new Date(),
-    })
     const response = await deps.returnDocumentRepository.handle(input._id)
+    if (response.modified_count > 0) {
+      const document = await deps.retrieveDocumentRepository.handle(input.document_id)
+      await deps.createActivityRepository.handle({
+        notes: `returned document ${document.code}`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
+    }
     // 4. output
     return {
       matched_count: response.matched_count,

@@ -46,17 +46,18 @@ export class CreateOwnerUseCase {
     })
     ownerEntity.data = deps.objClean(ownerEntity.data)
     // 3. database operation
-    await deps.createActivityRepository.handle({
-      notes: `created owner ${input.data.name}`,
-      user: {
-        _id: input.auth._id,
-        label: input.auth.name,
-        email: input.auth.email,
-      },
-      date: new Date(),
-    })
     const response = await deps.createOwnerRepository.handle(ownerEntity.data)
-    // 4. output
+    if (response.inserted_id) {
+      await deps.createActivityRepository.handle({
+        notes: `created owner ${input.data.name}`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
+    }
     return { inserted_id: response.inserted_id }
   }
 }

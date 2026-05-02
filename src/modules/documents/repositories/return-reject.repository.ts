@@ -17,8 +17,10 @@ export class ReturnRejectDocumentRepository implements IReturnRejectDocumentRepo
   ) {}
 
   async handle(_id: string): Promise<IReturnRejectDocumentOutput> {
-    return await this.database
-      .collection(collectionName)
-      .updateMany({ 'borrows._id': _id }, { $set: { 'borrows.$.status': 'approved' } }, { ...this.options })
+    return await this.database.collection(collectionName).updateMany(
+      { 'borrows._id': _id, 'borrows.status': { $ne: 'approved' } },
+      { $set: { 'borrows.$.status': 'approved' } },
+      { ...this.options },
+    )
   }
 }

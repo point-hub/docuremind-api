@@ -97,7 +97,6 @@ export class UpdateDocumentUseCase {
         label: input.auth.name,
         email: input.auth.email,
       },
-      updated_at: new Date(),
     })
 
     const coverFile = input.files.find((f) => f.fieldname === 'cover')
@@ -126,19 +125,28 @@ export class UpdateDocumentUseCase {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const keepFiles = input.data.document_files?.map((doc: any) => doc.name)
 
-    console.log(input.data)
-    // 3. database operation
+    const document = await deps.retrieveDocumentRepository.handle(input._id)
+
+    const isChanged =
+      input.data.code !== document.code ||
+      input.data.name !== document.name ||
+      input.data.type !== document.type ||
+      input.data.owner?._id !== document.owner?._id ||
+      input.data.vault?._id !== document.vault?._id ||
+      input.data.rack?._id !== document.rack?._id ||
+      input.data.notes !== document.notes ||
+      input.data.issued_date !== document.issued_date ||
+      input.data.due_date_reminder !== document.due_date_reminder ||
+      input.data.expired_date !== document.expired_date ||
+      coverFile !== undefined ||
+      newFiles.length > 0 ||
+      (keepFiles && document.document_files && keepFiles.length !== document.document_files.length)
+
+    if (isChanged) {
+      documentEntity.data.updated_at = new Date()
+    }
+
     try {
-      const document = await deps.retrieveDocumentRepository.handle(input._id)
-      await deps.createActivityRepository.handle({
-        notes: `updated document ${input.data.code}`,
-        user: {
-          _id: input.auth._id,
-          label: input.auth.name,
-          email: input.auth.email,
-        },
-        date: new Date(),
-      })
       const response = await deps.updateDocumentRepository.handle(
         input._id,
         documentEntity.data,
@@ -146,7 +154,17 @@ export class UpdateDocumentUseCase {
         newFiles as any,
         keepFiles as string[],
       )
-      // 4. output
+      if (response.modified_count > 0) {
+        await deps.createActivityRepository.handle({
+          notes: `updated document ${input.data.code}`,
+          user: {
+            _id: input.auth._id,
+            label: input.auth.name,
+            email: input.auth.email,
+          },
+          date: new Date(),
+        })
+      }
       return {
         matched_count: response.matched_count,
         modified_count: response.modified_count,

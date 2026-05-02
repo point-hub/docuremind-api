@@ -20,7 +20,7 @@ export class ReturnApproveDocumentRepository implements IReturnApproveDocumentRe
     return await this.database
       .collection(collectionName)
       .updateMany(
-        { 'borrows._id': _id },
+        { 'borrows._id': _id, 'borrows.status': { $ne: 'returned' } },
         { $set: { 'borrows.$.status': 'returned', status: 'available' } },
         { ...this.options },
       )

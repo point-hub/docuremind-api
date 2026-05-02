@@ -48,21 +48,29 @@ export class UpdateOwnerUseCase {
         label: input.auth.name,
         email: input.auth.email,
       },
-      updated_at: new Date(),
     })
-    // 3. database operation
     const owner = await deps.retrieveOwnerRepository.handle(input._id)
-    await deps.createActivityRepository.handle({
-      notes: `updated owner ${owner.name}`,
-      user: {
-        _id: input.auth._id,
-        label: input.auth.name,
-        email: input.auth.email,
-      },
-      date: new Date(),
-    })
+
+    const isChanged = input.data.name && input.data.name !== owner.name
+
+    if (isChanged) {
+      ownerEntity.data.updated_at = new Date()
+    } else {
+      delete ownerEntity.data.updated_at
+    }
+
     const response = await deps.updateOwnerRepository.handle(input._id, ownerEntity.data)
-    // 4. output
+    if (response.modified_count > 0) {
+      await deps.createActivityRepository.handle({
+        notes: `updated owner ${owner.name}`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
+    }
     return {
       matched_count: response.matched_count,
       modified_count: response.modified_count,
