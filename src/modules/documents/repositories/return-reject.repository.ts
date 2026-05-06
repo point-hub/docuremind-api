@@ -7,7 +7,7 @@ export interface IReturnRejectDocumentOutput {
   modified_count: number
 }
 export interface IReturnRejectDocumentRepository {
-  handle(_id: string): Promise<IReturnRejectDocumentOutput>
+  handle(_id: string, borrowId: string): Promise<IReturnRejectDocumentOutput>
 }
 
 export class ReturnRejectDocumentRepository implements IReturnRejectDocumentRepository {
@@ -16,9 +16,9 @@ export class ReturnRejectDocumentRepository implements IReturnRejectDocumentRepo
     public options?: Record<string, unknown>,
   ) {}
 
-  async handle(_id: string): Promise<IReturnRejectDocumentOutput> {
+  async handle(_id: string, borrowId: string): Promise<IReturnRejectDocumentOutput> {
     return await this.database.collection(collectionName).updateMany(
-      { 'borrows._id': _id, 'borrows.status': { $ne: 'approved' } },
+      { _id, borrows: { $elemMatch: { _id: borrowId, status: { $ne: 'approved' } } } },
       { $set: { 'borrows.$.status': 'approved' } },
       { ...this.options },
     )

@@ -27,7 +27,7 @@ export interface IOutput {
 export class ReturnRejectDocumentUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. database operation
-    const response = await deps.returnRejectDocumentRepository.handle(input.return_id)
+    const response = await deps.returnRejectDocumentRepository.handle(input._id, input.return_id)
     if (response.modified_count > 0) {
       const document = await deps.retrieveDocumentRepository.handle(input._id)
       await deps.createActivityRepository.handle({

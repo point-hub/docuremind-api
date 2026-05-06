@@ -7,7 +7,7 @@ export interface IBorrowApproveDocumentOutput {
   modified_count: number
 }
 export interface IBorrowApproveDocumentRepository {
-  handle(_id: string): Promise<IBorrowApproveDocumentOutput>
+  handle(_id: string, borrowId: string): Promise<IBorrowApproveDocumentOutput>
 }
 
 export class BorrowApproveDocumentRepository implements IBorrowApproveDocumentRepository {
@@ -16,11 +16,11 @@ export class BorrowApproveDocumentRepository implements IBorrowApproveDocumentRe
     public options?: Record<string, unknown>,
   ) {}
 
-  async handle(_id: string): Promise<IBorrowApproveDocumentOutput> {
+  async handle(_id: string, borrowId: string): Promise<IBorrowApproveDocumentOutput> {
     return await this.database
       .collection(collectionName)
       .updateMany(
-        { 'borrows._id': _id, 'borrows.status': { $ne: 'approved' } },
+        { _id, borrows: { $elemMatch: { _id: borrowId, status: { $ne: 'approved' } } } },
         { $set: { 'borrows.$.status': 'approved', status: 'borrowed' } },
         { ...this.options },
       )

@@ -36,7 +36,7 @@ export class BorrowApproveDocumentUseCase {
         message: "Cannot approve this data because it isn't available",
       })
     }
-    const response = await deps.borrowApproveDocumentRepository.handle(input.borrow_id)
+    const response = await deps.borrowApproveDocumentRepository.handle(input._id, input.borrow_id)
     if (response.modified_count > 0) {
       await deps.createActivityRepository.handle({
         notes: `approved the borrow request for document ${responseRetrieve.code}`,
