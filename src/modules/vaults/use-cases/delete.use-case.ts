@@ -38,17 +38,18 @@ export class DeleteVaultUseCase {
     }
     // 3. database operation
     const vault = await deps.retrieveVaultRepository.handle(input._id)
-    await deps.createActivityRepository.handle({
-      notes: `deleted vault "${vault.name}"`,
-      user: {
-        _id: input.auth._id,
-        label: input.auth.name,
-        email: input.auth.email,
-      },
-      date: new Date(),
-    })
     const response = await deps.deleteVaultRepository.handle(input._id)
-    // 4. output
+    if (response.deleted_count > 0) {
+      await deps.createActivityRepository.handle({
+        notes: `deleted vault ${vault.code}`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
+    }
     return { deleted_count: response.deleted_count }
   }
 }

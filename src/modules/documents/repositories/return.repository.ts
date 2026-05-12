@@ -20,7 +20,7 @@ export class ReturnDocumentRepository implements IReturnDocumentRepository {
     return await this.database
       .collection(collectionName)
       .updateMany(
-        { 'borrows._id': _id },
+        { _id, borrows: { $elemMatch: { status: 'approved' } } },
         { $set: { 'borrows.$.status': 'returning', 'borrows.$.returning_at': new Date() } },
         { ...this.options },
       )

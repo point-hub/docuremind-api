@@ -15,23 +15,7 @@ export const schema: ISchema[] = [
     collection: collectionName,
     unique: [['code']],
     uniqueIfExists: [[]],
-    schema: {
-      bsonType: 'object',
-      required: ['code'],
-      properties: {
-        code: {
-          bsonType: 'string',
-          description: 'The code for the document',
-        },
-        name: {
-          bsonType: 'string',
-          description: 'The name for the document',
-        },
-        notes: {
-          bsonType: 'string',
-          description: 'The notes for the document',
-        },
-      },
-    },
+    schema: {},
+
   },
 ]

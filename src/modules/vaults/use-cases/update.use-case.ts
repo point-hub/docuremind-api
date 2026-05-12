@@ -53,21 +53,32 @@ export class UpdateVaultUseCase {
         label: input.auth.name,
         email: input.auth.email,
       },
-      updated_at: new Date(),
     })
-    // 3. database operation
     const vault = await deps.retrieveVaultRepository.handle(input._id)
-    await deps.createActivityRepository.handle({
-      notes: `update vault "${vault.name}" to "${input.data.name}"`,
-      user: {
-        _id: input.auth._id,
-        label: input.auth.name,
-        email: input.auth.email,
-      },
-      date: new Date(),
-    })
+
+    const isChanged =
+      (input.data.code && input.data.code !== vault.code) ||
+      (input.data.name && input.data.name !== vault.name) ||
+      (input.data.racks && JSON.stringify(input.data.racks) !== JSON.stringify(vault.racks))
+
+    if (isChanged) {
+      vaultEntity.data.updated_at = new Date()
+    } else {
+      delete vaultEntity.data.updated_at
+    }
+
     const response = await deps.updateVaultRepository.handle(input._id, vaultEntity.data)
-    // 4. output
+    if (response.modified_count > 0) {
+      await deps.createActivityRepository.handle({
+        notes: `updated vault ${input.data.code ?? vault.code}`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
+    }
     return {
       matched_count: response.matched_count,
       modified_count: response.modified_count,

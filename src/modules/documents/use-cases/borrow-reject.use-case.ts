@@ -25,7 +25,19 @@ export interface IOutput {
 export class BorrowRejectDocumentUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. database operation
-    const response = await deps.borrowRejectDocumentRepository.handle(input.borrow_id)
+    const response = await deps.borrowRejectDocumentRepository.handle(input._id, input.borrow_id)
+    if (response.modified_count > 0) {
+      const document = await deps.retrieveDocumentRepository.handle(input._id)
+      await deps.createActivityRepository.handle({
+        notes: `rejected the borrow request for document ${document.code}`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
+    }
     // 2. output
     return {
       matched_count: response.matched_count,

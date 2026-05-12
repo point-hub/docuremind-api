@@ -116,7 +116,7 @@ export class CreateDocumentUseCase {
     console.log('h')
     // 3. database operation
     await deps.createActivityRepository.handle({
-      notes: `created document "${input.data.name}"`,
+      notes: `created document ${input.data.code}`,
       user: {
         _id: input.auth._id,
         label: input.auth.name,

@@ -29,17 +29,19 @@ export interface IOutput {
 export class ReturnApproveDocumentUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
     // 1. database operation
-    const document = await deps.retrieveDocumentRepository.handle(input._id)
-    await deps.createActivityRepository.handle({
-      notes: `request borrow for "${document.name}"`,
-      user: {
-        _id: input.auth._id,
-        label: input.auth.name,
-        email: input.auth.email,
-      },
-      date: new Date(),
-    })
-    const response = await deps.returnApproveDocumentRepository.handle(input.return_id)
+    const response = await deps.returnApproveDocumentRepository.handle(input._id, input.return_id)
+    if (response.modified_count > 0) {
+      const document = await deps.retrieveDocumentRepository.handle(input._id)
+      await deps.createActivityRepository.handle({
+        notes: `approved the return of document ${document.code}`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
+    }
     // 2. output
     return {
       matched_count: response.matched_count,

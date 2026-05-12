@@ -57,23 +57,23 @@ export class CreateUserUseCase {
     userEntity.trimmedEmail()
     userEntity.trimmedUsername()
     // 4. database operation
-    await deps.createActivityRepository.handle({
-      notes: `invited "${input.name}" with role "${input.role}"`,
-      user: {
-        _id: input.auth._id,
-        label: input.auth.name,
-        email: input.auth.email,
-      },
-      date: new Date(),
-    })
     const response = await deps.createUserRepository.handle(userEntity.data)
-    // 5. send welcome email
+    if (response.inserted_id) {
+      await deps.createActivityRepository.handle({
+        notes: `invited user ${input.username}`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
+    }
     const compiledTemplate = await deps.renderHbsTemplate('modules/users/emails/email-verification.hbs', {
       linkVerification: linkVerification,
       codeVerification: codeVerification,
     })
     deps.sendEmail(compiledTemplate, userEntity.data.email as string, 'Please verify your email address')
-    // 5. output
     return { inserted_id: response.inserted_id }
   }
 }

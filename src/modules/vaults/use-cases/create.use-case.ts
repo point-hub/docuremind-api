@@ -53,17 +53,18 @@ export class CreateVaultUseCase {
     })
     vaultEntity.data = deps.objClean(vaultEntity.data)
     // 3. database operation
-    await deps.createActivityRepository.handle({
-      notes: `create vault "${input.data.name}"`,
-      user: {
-        _id: input.auth._id,
-        label: input.auth.name,
-        email: input.auth.email,
-      },
-      date: new Date(),
-    })
     const response = await deps.createVaultRepository.handle(vaultEntity.data)
-    // 4. output
+    if (response.inserted_id) {
+      await deps.createActivityRepository.handle({
+        notes: `created vault ${input.data.code}`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
+    }
     return { inserted_id: response.inserted_id }
   }
 }

@@ -59,17 +59,19 @@ export class BorrowDocumentUseCase {
     }
 
     // 3. database operation
-    const document = await deps.retrieveDocumentRepository.handle(input._id)
-    await deps.createActivityRepository.handle({
-      notes: `request borrow document "${document.name}"`,
-      user: {
-        _id: input.auth._id,
-        label: input.auth.name,
-        email: input.auth.email,
-      },
-      date: new Date(),
-    })
     const response = await deps.borrowDocumentRepository.handle(input._id, documentEntity)
+    if (response.modified_count > 0) {
+      const document = await deps.retrieveDocumentRepository.handle(input._id)
+      await deps.createActivityRepository.handle({
+        notes: `requested to borrow document ${document.code}`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
+    }
     // 4. output
     return {
       matched_count: response.matched_count,

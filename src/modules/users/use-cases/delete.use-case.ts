@@ -29,17 +29,21 @@ export class DeleteUserUseCase {
     await deps.schemaValidation(input, deleteValidation)
     // 2. database operation
     const user = await deps.retrieveUserRepository.handle(input._id)
-    await deps.createActivityRepository.handle({
-      notes: `delete "${user.name}"`,
-      user: {
-        _id: input.auth._id,
-        label: input.auth.name,
-        email: input.auth.email,
-      },
-      date: new Date(),
-    })
+    if (!user) {
+      throw new Error('User not found')
+    }
     const response = await deps.deleteUserRepository.handle(input._id)
-    // 3. output
+    if (response.deleted_count > 0) {
+      await deps.createActivityRepository.handle({
+        notes: `deleted user ${user.username}`,
+        user: {
+          _id: input.auth._id,
+          label: input.auth.name,
+          email: input.auth.email,
+        },
+        date: new Date(),
+      })
+    }
     return { deleted_count: response.deleted_count }
   }
 }
