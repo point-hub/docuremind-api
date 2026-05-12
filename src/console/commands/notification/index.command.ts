@@ -1,7 +1,7 @@
 import { BaseConsoleCommand, BaseDatabaseConnection, BaseMongoDBConnection } from '@point-hub/papi'
 
 import mongoDBConfig from '@/config/mongodb'
-import { renderHbsTemplate, sendMail } from '@/utils/email'
+// import { renderHbsTemplate, sendMail } from '@/utils/email'
 
 export default class NotificationCommand extends BaseConsoleCommand {
   dbConnection = new BaseDatabaseConnection(new BaseMongoDBConnection(mongoDBConfig.url, mongoDBConfig.name))
@@ -21,7 +21,7 @@ export default class NotificationCommand extends BaseConsoleCommand {
       await this.dbConnection.open()
       session = this.dbConnection.startSession()
       session.startTransaction()
-      const todayString = new Date().toISOString().substring(0, 10)
+      // const todayString = new Date().toISOString().substring(0, 10)
       const response = await this.dbConnection.collection('documents').retrieveAll({
         filter: {
           due_date_reminder: {

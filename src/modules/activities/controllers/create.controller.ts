@@ -1,11 +1,11 @@
-import { objClean } from '@point-hub/express-utils'
+// import { objClean } from '@point-hub/express-utils'
 import type { IController, IControllerInput } from '@point-hub/papi'
 
 import type { IAuth } from '@/modules/users/interface'
 import { verifyUserToken } from '@/modules/users/utils/verify-user-token'
-import { UniqueValidation } from '@/utils/unique-validation'
-import { schemaValidation } from '@/utils/validation'
 
+// import { UniqueValidation } from '@/utils/unique-validation'
+// import { schemaValidation } from '@/utils/validation'
 import { CreateActivityRepository } from '../repositories/create.repository'
 import { CreateActivityUseCase } from '../use-cases/create.use-case'
 
@@ -17,7 +17,7 @@ export const createActivityController: IController = async (controllerInput: ICo
     session.startTransaction()
     // 2. define repository
     const createActivityRepository = new CreateActivityRepository(controllerInput.dbConnection, { session })
-    const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
+    // const uniqueValidation = new UniqueValidation(controllerInput.dbConnection, { session })
     // 3. handle business rules
     // 3.1 check authenticated user
     const verifyTokenResponse = await verifyUserToken(controllerInput, { session })
@@ -28,10 +28,10 @@ export const createActivityController: IController = async (controllerInput: ICo
         data: controllerInput.httpRequest['body'],
       },
       {
-        objClean,
-        uniqueValidation,
+        // objClean,
+        // uniqueValidation,
         createActivityRepository,
-        schemaValidation,
+        // schemaValidation,
       },
     )
     await session.commitTransaction()

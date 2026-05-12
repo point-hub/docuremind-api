@@ -1,9 +1,9 @@
-FROM node:20
+FROM node:24
 RUN npm install -g bun
 USER node
 WORKDIR /home/node/app
 
-COPY --chown=node:node package.json bun.lockb ./
+COPY --chown=node:node package.json bun.lock ./
 RUN bun install --frozen-lock
 COPY --chown=node:node . .
 

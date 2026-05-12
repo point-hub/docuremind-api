@@ -24,6 +24,7 @@ export interface IOutput {
 
 export class NotificationUseCase {
   static async handle(input: IInput, deps: IDeps): Promise<IOutput> {
+    console.log(input)
     // 1. validate schema
     // 2. define entity
     // 3. database operation
