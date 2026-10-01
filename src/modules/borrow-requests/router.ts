@@ -1,4 +1,5 @@
 import { Router } from 'express'
+
 import { type IBaseAppInput } from '@/app'
 
 const makeRouter = async (routerInput: IBaseAppInput): Promise<Router> => {

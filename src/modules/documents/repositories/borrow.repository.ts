@@ -19,6 +19,10 @@ export class BorrowDocumentRepository implements IBorrowDocumentRepository {
   async handle(_id: string, document: IDocument): Promise<IBorrowDocumentOutput> {
     return await this.database
       .collection(collectionName)
-      .updateMany({ _id, status: 'available' }, { $push: { borrows: document } }, { ...this.options, ignoreUndefined: true })
+      .updateMany(
+        { _id, status: 'available' },
+        { $push: { borrows: document } },
+        { ...this.options, ignoreUndefined: true },
+      )
   }
 }

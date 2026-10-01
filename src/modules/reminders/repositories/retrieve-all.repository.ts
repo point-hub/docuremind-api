@@ -1,4 +1,5 @@
 import type { IDatabase, IPagination, IQuery } from '@point-hub/papi'
+
 import { collectionName } from '../entity'
 import type { IReminderEntity } from '../interface'
 

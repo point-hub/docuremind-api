@@ -1,4 +1,5 @@
 import type { ISchema } from '@point-hub/papi'
+
 import { collectionName } from './entity'
 
 export const schema: ISchema[] = [

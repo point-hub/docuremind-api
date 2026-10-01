@@ -16,6 +16,5 @@ export const schema: ISchema[] = [
     unique: [['code']],
     uniqueIfExists: [[]],
     schema: {},
-
   },
 ]

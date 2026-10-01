@@ -1,4 +1,5 @@
 import type { IDatabase, IDocument } from '@point-hub/papi'
+
 import { collectionName } from '../entity'
 
 export interface ICreateReminderOutput {

@@ -1,9 +1,11 @@
 import type { ISchemaValidation } from '@point-hub/papi'
 
+import type { ICreateActivityRepository } from '@/modules/activities/repositories/create.repository'
 import { type IAuth } from '@/modules/users/interface'
 import type { UniqueValidation } from '@/utils/unique-validation'
 
 import type { IBorrowRejectDocumentRepository } from '../repositories/borrow-reject.repository'
+import type { IRetrieveDocumentRepository } from '../repositories/retrieve.repository'
 
 export interface IInput {
   auth: IAuth
@@ -14,6 +16,8 @@ export interface IInput {
 export interface IDeps {
   schemaValidation: ISchemaValidation
   borrowRejectDocumentRepository: IBorrowRejectDocumentRepository
+  retrieveDocumentRepository: IRetrieveDocumentRepository
+  createActivityRepository: ICreateActivityRepository
   uniqueValidation: UniqueValidation
 }
 
